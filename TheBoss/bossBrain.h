@@ -1,5 +1,4 @@
 #include "commonHeads.h"
-#include "bossUART.h"
 
 /*----------------------------------------------------------------------------
  *      Semaphore creation & usage
