@@ -393,11 +393,6 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>bossMotors.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\bossMotors.h</FilePath>
-            </File>
-            <File>
               <FileName>bossVoice.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\bossVoice.h</FilePath>
@@ -426,6 +421,26 @@
               <FileName>bossDriver.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\bossDriver.h</FilePath>
+            </File>
+            <File>
+              <FileName>bossDriver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\bossDriver.c</FilePath>
+            </File>
+            <File>
+              <FileName>bossVoice.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\bossVoice.c</FilePath>
+            </File>
+            <File>
+              <FileName>bossLED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\bossLED.c</FilePath>
+            </File>
+            <File>
+              <FileName>bossUART.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\bossUART.c</FilePath>
             </File>
           </Files>
         </Group>
