@@ -20,11 +20,18 @@
 #define NOTE_GU notes[11]
 #define NOTE_AU notes[12]
 
+//Audio Choice
+#define SILENCE								0x00
+#define CHALLENGE_TIME				0x01
+#define ENDING_TIME						0x02
+#define WIFI_CONNECT					0x03
+
 //Voice Functions
 void InitAudio(void);
 void play_note(uint32_t freq);
 void stop_music(void);
 void play_end_song(void);
 void play_moving_song(void);
+void play_wifi_song(void);
 
 #endif // !BOSSVOICE_H

@@ -19,11 +19,11 @@
 #define REQUEST_MASK(x) (((uint32_t)(((uint32_t)(x))<<REQUEST_SHIFT))&REQUEST_M)
 #define OPTION_M		0x0f
 #define OPTION_MASK(x) (((uint32_t)(((uint32_t)(x))))&OPTION_M)
+
 #define DEFAULT_FUNCTIONS 0x00
 #define DRIVEMODES 0x10
 #define DIRECTION_OPTIONS 0x20
-
-#define USER_AUTO 0x00
+#define AUDIO_CONTROL 0x30
 
 /*----------------------------------------------------------------------------
  * Functions

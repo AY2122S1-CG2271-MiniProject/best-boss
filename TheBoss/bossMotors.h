@@ -1,10 +1,10 @@
 #include <stdint.h>
+#include "commonHeads.h"
 
 #ifndef DRIVER_H
 #define DRIVER_H
 
 enum move_t {STOP, FORWARD, REVERSE, CURVE_LEFT, CURVE_RIGHT, TURN_LEFT, TURN_RIGHT, REVERSE_LEFT, REVERSE_RIGHT};
-enum wheel_t {WHEEL_STOP, WHEEL_FORWARD, WHEEL_REVERSE, WHEEL_SLOW_FORWARD, WHEEL_LOW_REVERSE};
 
 //driver functions
 void InitMotor(void);
@@ -16,19 +16,18 @@ void motor_controls(enum move_t move);
 #define MOTOR_FAST (375000 / 50)
 #define MOTOR_SLOW (375000 / 100)
 #define MOTOR_SLOWER (375000 / 150)
-#define MOTOR_FAST_RIGHT (MOTOR_FAST * 1) //trial and error multiply
-#define MOTOR_SLOW_RIGHT (MOTOR_SLOW * 1)
-#define MOTOR_SLOWER_RIGHT (MOTOR_SLOWER * 1)
 
 //PWMs
-#define PTD0_Pin 0
-#define PTD1_Pin 1
-#define PTD2_Pin 2
-#define PTD3_Pin 3
+#define PTD0_Pin 0										//PTD0_Pin
+#define PTD1_Pin 1										//PTD1_Pin
+#define PTD2_Pin 2										//PTD2_Pin
+#define PTD3_Pin 3										//PTD3_Pin
 
 //HIGH/LOW TO control TO and From in PTC8 and PTC9
 #define FRONT_PIN 8
 #define REAR_PIN 9
+//#define RIGHT_PIN 8
+//#define LEFT_PIN 9
 
 //UART rx_data parsing
 #define USER_STOP 0x00
@@ -57,4 +56,4 @@ uint8_t driveInstructions, NorthSouth, EastWest;
 #define BACKWARD_LEFT 0x21
 #define BACKWARD_RIGHT 0x22
 
-#endif // DRIVER_H
+#endif // !DRIVER_H

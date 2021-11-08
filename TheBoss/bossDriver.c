@@ -249,3 +249,16 @@ void executeDrive(void) {
 	}
 	motor_control(move);
 }
+
+int isDriving(void) {
+	return (driveInstructions == STAYSTILL) ? 0 : 1;
+}
+
+int auto_modeOn = 0;
+void handleAutoSwitch(uint8_t option) {
+	auto_modeOn = (option == USER_AUTO) ? 1 : ((option == END_AUTO) ? 0 : auto_modeOn);
+}
+
+void driverless_mode(void) {
+	
+}

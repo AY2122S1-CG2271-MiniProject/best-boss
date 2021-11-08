@@ -16,6 +16,9 @@ void stop(void);
 void rewrite_driveMode(uint8_t optionNumber);
 void rewrite_direction(uint8_t optionNumber);
 void executeDrive(void);
+int isDriving(void);
+void driverless_mode(void);
+void handleAutoSwitch(uint8_t option);
 
 // Movement
 // larger oveflow value => higher duty cycle => faster
@@ -35,6 +38,10 @@ void executeDrive(void);
 #define REAR_PIN 9
 //#define RIGHT_PIN 8
 //#define LEFT_PIN 9
+
+//AUTO
+#define USER_AUTO 0x02
+#define END_AUTO 0x03
 
 //UART rx_data parsing
 #define USER_STOP 0x00

@@ -3,6 +3,7 @@
 
 int notes[] = {1047, 1175, 1319, 1397, 1568, 1760, 1976, 2093, 2349, 2637, 2794, 3136, 3520};
 int Asharp = 1865;
+uint8_t audio_choice = 0x01;
 
 void InitAudio(void) {
 	SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK;
@@ -102,6 +103,7 @@ void play_end_song(void) {
 	osDelay(4000);
 
 	stop_music();
+	osDelay(1000);
 }
 
 void play_moving_song(void) {
@@ -184,4 +186,13 @@ void play_moving_song(void) {
 	osDelay(1600);
 
 	stop_music();
+	osDelay(1000);
+}
+
+void play_wifi_song(void) {
+	play_note(NOTE_A);
+	osDelay(1600);
+	
+	stop_music();
+	osDelay(1600);
 }
