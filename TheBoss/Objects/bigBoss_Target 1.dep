@@ -1,8 +1,8 @@
 Dependencies for Project 'bigBoss', Target 'Target 1': (DO NOT MODIFY !)
 CompilerVersion: 5060750::V5.06 update 6 (build 750)::ARMCC
-F (.\Semaphore.c)(0x618424C7)(--c99 --gnu -c --cpu Cortex-M0+ -D__RTX -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I.\RTE\CMSIS-I.\RTE\Device\MKL25Z128xxx4-I.\RTE\_Target_1-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include-D__UVISION_VERSION="529" -D_RTE_ -DMKL25Z128xxx4-o .\objects\semaphore.o --omf_browse .\objects\semaphore.crf --depend .\objects\semaphore.d)
-F (.\main.c)(0x61851CF7)(--c99 --gnu -c --cpu Cortex-M0+ -D__RTX -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I.\RTE\CMSIS-I.\RTE\Device\MKL25Z128xxx4-I.\RTE\_Target_1-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include-D__UVISION_VERSION="529" -D_RTE_ -DMKL25Z128xxx4-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
-I (commonHeads.h)(0x6183F4A1)
+F (.\Semaphore.c)(0x618593C4)(--c99 --gnu -c --cpu Cortex-M0+ -D__RTX -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I.\RTE\CMSIS-I.\RTE\Device\MKL25Z128xxx4-I.\RTE\_Target_1-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include-D__UVISION_VERSION="529" -D_RTE_ -DMKL25Z128xxx4-o .\objects\semaphore.o --omf_browse .\objects\semaphore.crf --depend .\objects\semaphore.d)
+F (.\main.c)(0x6189570B)(--c99 --gnu -c --cpu Cortex-M0+ -D__RTX -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I.\RTE\CMSIS-I.\RTE\Device\MKL25Z128xxx4-I.\RTE\_Target_1-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include-D__UVISION_VERSION="529" -D_RTE_ -DMKL25Z128xxx4-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+I (commonHeads.h)(0x61895893)
 I (.\RTE\_Target_1\RTE_Components.h)(0x6183EB12)
 I (C:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include\MKL25Z4.h)(0x585B7C0A)
 I (D:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -13,19 +13,69 @@ I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cms
 I (.\RTE\Device\MKL25Z128xxx4\system_MKL25Z4.h)(0x56441C9A)
 I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include\cmsis_os2.h)(0x5C8F1798)
 I (D:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9AD218)
-I (bossDriver.h)(0x6185394A)
-I (bossMotors.h)(0x61853750)
-I (bossVoice.h)(0x61852C35)
-I (bossLED.h)(0x61842403)
-I (bossBrain.h)(0x61852E42)
-I (bossUART.h)(0x61842403)
-F (.\bossMotors.h)(0x61853750)()
-F (.\bossVoice.h)(0x61852C35)()
-F (.\bossLED.h)(0x61842403)()
-F (.\bossBrain.h)(0x61852E42)()
-F (.\bossUART.h)(0x61842403)()
-F (.\commonHeads.h)(0x6183F4A1)()
-F (.\bossDriver.h)(0x6185394A)()
+I (bossDriver.h)(0x6189406D)
+I (bossVoice.h)(0x6189575B)
+I (bossLED.h)(0x61894590)
+I (bossBrain.h)(0x61894C22)
+I (bossUART.h)(0x6189570B)
+F (.\bossVoice.h)(0x6189575B)()
+F (.\bossLED.h)(0x61894590)()
+F (.\bossBrain.h)(0x61894C22)()
+F (.\bossUART.h)(0x6189570B)()
+F (.\commonHeads.h)(0x61895893)()
+F (.\bossDriver.h)(0x6189406D)()
+F (.\bossDriver.c)(0x61894046)(--c99 --gnu -c --cpu Cortex-M0+ -D__RTX -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I.\RTE\CMSIS-I.\RTE\Device\MKL25Z128xxx4-I.\RTE\_Target_1-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include-D__UVISION_VERSION="529" -D_RTE_ -DMKL25Z128xxx4-o .\objects\bossdriver.o --omf_browse .\objects\bossdriver.crf --depend .\objects\bossdriver.d)
+I (bossDriver.h)(0x6189406D)
+I (commonHeads.h)(0x61895893)
+I (.\RTE\_Target_1\RTE_Components.h)(0x6183EB12)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include\MKL25Z4.h)(0x585B7C0A)
+I (D:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\core_cm0plus.h)(0x5D2590B6)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_version.h)(0x5D2590B6)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_compiler.h)(0x5D2590B6)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_armcc.h)(0x5D2590B6)
+I (.\RTE\Device\MKL25Z128xxx4\system_MKL25Z4.h)(0x56441C9A)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include\cmsis_os2.h)(0x5C8F1798)
+I (D:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9AD218)
+F (.\bossVoice.c)(0x61893F7B)(--c99 --gnu -c --cpu Cortex-M0+ -D__RTX -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I.\RTE\CMSIS-I.\RTE\Device\MKL25Z128xxx4-I.\RTE\_Target_1-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include-D__UVISION_VERSION="529" -D_RTE_ -DMKL25Z128xxx4-o .\objects\bossvoice.o --omf_browse .\objects\bossvoice.crf --depend .\objects\bossvoice.d)
+I (commonHeads.h)(0x61895893)
+I (.\RTE\_Target_1\RTE_Components.h)(0x6183EB12)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include\MKL25Z4.h)(0x585B7C0A)
+I (D:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\core_cm0plus.h)(0x5D2590B6)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_version.h)(0x5D2590B6)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_compiler.h)(0x5D2590B6)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_armcc.h)(0x5D2590B6)
+I (.\RTE\Device\MKL25Z128xxx4\system_MKL25Z4.h)(0x56441C9A)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include\cmsis_os2.h)(0x5C8F1798)
+I (D:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9AD218)
+I (bossVoice.h)(0x6189575B)
+F (.\bossLED.c)(0x61894590)(--c99 --gnu -c --cpu Cortex-M0+ -D__RTX -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I.\RTE\CMSIS-I.\RTE\Device\MKL25Z128xxx4-I.\RTE\_Target_1-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include-D__UVISION_VERSION="529" -D_RTE_ -DMKL25Z128xxx4-o .\objects\bossled.o --omf_browse .\objects\bossled.crf --depend .\objects\bossled.d)
+I (bossLED.h)(0x61894590)
+I (commonHeads.h)(0x61895893)
+I (.\RTE\_Target_1\RTE_Components.h)(0x6183EB12)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include\MKL25Z4.h)(0x585B7C0A)
+I (D:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\core_cm0plus.h)(0x5D2590B6)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_version.h)(0x5D2590B6)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_compiler.h)(0x5D2590B6)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_armcc.h)(0x5D2590B6)
+I (.\RTE\Device\MKL25Z128xxx4\system_MKL25Z4.h)(0x56441C9A)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include\cmsis_os2.h)(0x5C8F1798)
+I (D:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9AD218)
+F (.\bossUART.c)(0x618958CE)(--c99 --gnu -c --cpu Cortex-M0+ -D__RTX -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I.\RTE\CMSIS-I.\RTE\Device\MKL25Z128xxx4-I.\RTE\_Target_1-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include-D__UVISION_VERSION="529" -D_RTE_ -DMKL25Z128xxx4-o .\objects\bossuart.o --omf_browse .\objects\bossuart.crf --depend .\objects\bossuart.d)
+I (bossUART.h)(0x6189570B)
+I (commonHeads.h)(0x61895893)
+I (.\RTE\_Target_1\RTE_Components.h)(0x6183EB12)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include\MKL25Z4.h)(0x585B7C0A)
+I (D:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\core_cm0plus.h)(0x5D2590B6)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_version.h)(0x5D2590B6)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_compiler.h)(0x5D2590B6)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_armcc.h)(0x5D2590B6)
+I (.\RTE\Device\MKL25Z128xxx4\system_MKL25Z4.h)(0x56441C9A)
+I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include\cmsis_os2.h)(0x5C8F1798)
+I (D:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9AD218)
 F (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\Library\ARM\RTX_CM0.lib)(0x5D2590B8)()
 F (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\Source\rtx_lib.c)(0x5D2590B8)(--c99 --gnu -c --cpu Cortex-M0+ -D__RTX -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I.\RTE\CMSIS-I.\RTE\Device\MKL25Z128xxx4-I.\RTE\_Target_1-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include-D__UVISION_VERSION="529" -D_RTE_ -DMKL25Z128xxx4-o .\objects\rtx_lib.o --omf_browse .\objects\rtx_lib.crf --depend .\objects\rtx_lib.d)
 I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include\cmsis_compiler.h)(0x5D2590B6)
@@ -45,7 +95,7 @@ I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\Includ
 I (D:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5D9AD218)
 I (C:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include\cmsis_os2.h)(0x5C8F1798)
 F (RTE\CMSIS\RTX_Config.h)(0x5C8F4DD4)()
-F (RTE\Device\MKL25Z128xxx4\startup_MKL25Z4.s)(0x56441C9A)(--cpu Cortex-M0+ --pd "__RTX SETA 1" --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\CMSIS-I.\RTE\Device\MKL25Z128xxx4-I.\RTE\_Target_1-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include--pd "__UVISION_VERSION SETA 529" --pd "_RTE_ SETA 1" --pd "MKL25Z128xxx4 SETA 1"--list .\listings\startup_mkl25z4.lst --xref -o .\objects\startup_mkl25z4.o --depend .\objects\startup_mkl25z4.d)
+F (RTE\Device\MKL25Z128xxx4\startup_MKL25Z4.s)(0x618593C5)(--cpu Cortex-M0+ --pd "__RTX SETA 1" --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\CMSIS-I.\RTE\Device\MKL25Z128xxx4-I.\RTE\_Target_1-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include--pd "__UVISION_VERSION SETA 529" --pd "_RTE_ SETA 1" --pd "MKL25Z128xxx4 SETA 1"--list .\listings\startup_mkl25z4.lst --xref -o .\objects\startup_mkl25z4.o --depend .\objects\startup_mkl25z4.d)
 F (RTE\Device\MKL25Z128xxx4\system_MKL25Z4.c)(0x56441C9A)(--c99 --gnu -c --cpu Cortex-M0+ -D__RTX -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I.\RTE\CMSIS-I.\RTE\Device\MKL25Z128xxx4-I.\RTE\_Target_1-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\RTOS2\RTX\Include-IC:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include-D__UVISION_VERSION="529" -D_RTE_ -DMKL25Z128xxx4-o .\objects\system_mkl25z4.o --omf_browse .\objects\system_mkl25z4.crf --depend .\objects\system_mkl25z4.d)
 I (D:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
 I (C:\Users\aksle\AppData\Local\Arm\Packs\Keil\Kinetis_KLxx_DFP\1.15.0\Device\Include\MKL25Z4.h)(0x585B7C0A)
