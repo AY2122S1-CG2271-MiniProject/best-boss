@@ -107,13 +107,13 @@ void loop() {
     response = "Connecting to Board...";
     Serial2.write(0x01);
   }
-  if(req.indexOf("AutoDrive") != -1)
+  if(req.indexOf("autoOn") != -1)
   {
     digitalWrite(output26, LOW);
     response = "Auto Mode On.";
     Serial2.write(0x02);
   }  
-  if(req.indexOf("EndAutoDrive") != -1)
+  if(req.indexOf("autoOff") != -1)
   {
     digitalWrite(output26, LOW);
     response = "Auto Mode Off.";
