@@ -11,6 +11,7 @@
  
 osSemaphoreId_t bossDrive;                  // semaphore id
 osSemaphoreId_t bossVoice;                  // semaphore id
-osSemaphoreId_t bossAuto;                  // semaphore id
+osSemaphoreId_t bossAuto;  	                // semaphore id
+osSemaphoreId_t bossAudio;									//semaphore id
 
 #endif // !BRAIN_H
