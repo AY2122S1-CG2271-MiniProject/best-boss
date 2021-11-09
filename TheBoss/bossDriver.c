@@ -1,7 +1,43 @@
 #include "bossDriver.h"
 
+#define STEPS 20
+#define MAX_DUTY_CYCLE 0x1D4C //7500 (50Hz)
+volatile int j[STEPS] = {0};
+volatile int k[STEPS] = {0};
+
+
 //RX_data Processing Tools
 uint8_t driveInstructions, NorthSouth, EastWest;
+
+void InitSensor(void) {
+	// Configure MUX settings for sensor
+ PORTD->PCR[TRIG_PIN] &= ~PORT_PCR_MUX_MASK;
+ PORTD->PCR[TRIG_PIN] |= PORT_PCR_MUX(4);
+	
+	//Select clock for TPM module
+	SIM->SOPT2 &= ~SIM_SOPT2_TPMSRC_MASK;
+	SIM->SOPT2 |= SIM_SOPT2_TPMSRC(1); //MCGFLLCLK OR MCGPLLCLK/2
+	
+	//set modulo value 48000000/128 = 375000, 375000Hz/50Hz = 7500
+	TPM1->MOD = 7500;
+	
+	//Edge-Aligned PWM
+	//CMOD - 1 and PS - 111 (128)
+	TPM1_SC &= ~((TPM_SC_CMOD_MASK) | (TPM_SC_PS_MASK));
+	TPM1_SC |= (TPM_SC_CMOD(1) | TPM_SC_PS(7)); //CMOD = 1 => LPTPM counter increments on every LPTPM counter clock
+	TPM1_SC &= ~(TPM_SC_CPWMS_MASK); //count up by default (0)
+
+	//enable PWM on TPM1 channel 0 - PTD5
+	TPM1_C0SC &= ~((TPM_CnSC_ELSB_MASK) | (TPM_CnSC_ELSA_MASK) | (TPM_CnSC_MSB_MASK) | (TPM_CnSC_MSA_MASK));
+	TPM1_C0SC |= (TPM_CnSC_ELSB(1) | TPM_CnSC_MSB(1));
+ 
+ // Configure MUX settings for ECHO
+ PORTD->PCR[ECHO_PIN] &= ~PORT_PCR_MUX_MASK;
+ PORTD->PCR[ECHO_PIN] |= PORT_PCR_MUX(1);
+
+ // Set Data Direction Registers for TRIG_PIN(OUTPUT) , ECHO_PIN(INPUT)
+ PTD->PDDR &= ~MASK(ECHO_PIN); //INPUT
+}
 
 void InitMotor(void) {
 	// Enable Clock Gating for PORTB and PORTD
@@ -174,7 +210,7 @@ void stop(void) {
 }
 
 void rewrite_driveMode(uint8_t optionNumber) {
-	driveInstructions = 0x00;
+	//driveInstructions = 0x00;
 	NorthSouth = DRIVE_BACK_GO(optionNumber);
 	driveInstructions = MERGE_INSTRUCTIONS(NorthSouth, EastWest);
 	switch (optionNumber) {
@@ -196,7 +232,7 @@ void rewrite_driveMode(uint8_t optionNumber) {
 }
 
 void rewrite_direction(uint8_t optionNumber) {
-	driveInstructions = 0x00;
+	//driveInstructions = 0x00;
 	EastWest = DRIVE_WAY(optionNumber);
 	driveInstructions = MERGE_INSTRUCTIONS(EastWest, NorthSouth);
 	switch (optionNumber) {
@@ -259,6 +295,73 @@ void handleAutoSwitch(uint8_t option) {
 	auto_modeOn = (option == USER_AUTO) ? 1 : ((option == END_AUTO) ? 0 : auto_modeOn);
 }
 
-void driverless_mode(void) {
-	
+void autoFwd(enum move_t move, int distance,int step){
+	int scaled_distance = distance*10000;
+	while(k[step] < scaled_distance) 
+	{
+		TPM1->MOD = 7500;
+		TPM1_C0V = MAX_DUTY_CYCLE;
+		TPM2->MOD = 7500;
+		TPM2_C0V = MAX_DUTY_CYCLE;
+		k[step]++;
+	}	
+		stop();		
+}
+
+void autoFwdAlt(enum move_t move, int step){
+	while(j[step] < 110000)
+	{
+		TPM0_C0V = MOTOR_FAST;
+		TPM0_C1V = MOTOR_FAST;
+		TPM0_C2V = MOTOR_FAST;
+		TPM0_C3V = MOTOR_FAST;
+		j[step]++;
+	}	
+		stop();
+}
+
+void autoLeft(enum move_t move, int step){
+		while(j[step] < 7500) // turn left need to test
+		{
+		  FrontReverseRear();
+			TPM0_C0V = MOTOR_FAST;
+			TPM0_C1V = MOTOR_FAST;
+			TPM0_C2V = 0;
+			TPM0_C3V = 0;
+			j[step]++;
+		}
+		stop();
+}
+
+
+void autoRight(enum move_t move, int step){
+		while(j[step] < 8000) // turn right need to test
+		{
+		  FrontReverseRear();
+			TPM0_C0V = 0;
+			TPM0_C1V = 0;
+			TPM0_C2V = MOTOR_FAST;
+			TPM0_C3V = MOTOR_FAST;
+			j[step]++;
+		}
+		stop();
+}
+
+void driverless_mode(enum move_t move, int distance) {
+	autoFwd(AUTO, distance, 0);
+	autoLeft(AUTO,0);
+	autoFwdAlt(AUTO,1);
+	autoFwdAlt(AUTO,2);
+	autoRight(AUTO,3);
+	autoFwdAlt(AUTO,4);
+	autoFwdAlt(AUTO,5);
+	autoRight(AUTO,6);
+	autoFwdAlt(AUTO,7);
+	autoFwdAlt(AUTO,8);
+	autoFwd(AUTO,6,1);
+	autoRight(AUTO,9);
+	autoFwdAlt(AUTO,10);
+	autoFwdAlt(AUTO,11);
+	autoFwdAlt(AUTO,17);
+	autoFwd(AUTO,distance+5,2);
 }

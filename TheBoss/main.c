@@ -8,6 +8,7 @@
 #include "bossLED.h"
 #include "bossBrain.h"
 #include "bossUART.h"
+#include "bossSensor.h"
 
 
 //osSemaphoreId_t bossBrain;			//semaphore id
@@ -16,7 +17,7 @@
  * Application main thread
  *---------------------------------------------------------------------------*/
 
-int statusUpdate = 0;
+int statusUpdate = 1; //original is 0
 void handleConnection(uint8_t option) {
 	statusUpdate = (option == WIFI_CONNECT) ? 1 : 0;
 }
@@ -70,10 +71,13 @@ void bDrive (void *arg) {
 	}
 }
 
+volatile float sensorDistance = 0.0;
+
 void bAuto (void *arg) {
 	for (;;) {
 		osSemaphoreAcquire(bossAuto, osWaitForever);
-		driverless_mode();
+		sensorDistance = checkDistance();
+		driverless_mode(AUTO, sensorDistance);
 	}
 }
 
