@@ -1,5 +1,8 @@
 #include "commonHeads.h"
 
+#ifndef LED_H
+#define LED_H
+
 /*----------------------------------------------------------------------------
  * Board LEDs
  *---------------------------------------------------------------------------*/
@@ -10,105 +13,64 @@
 enum color_t {NONE, RED, GREEN, BLUE, CYAN, YELLOW, MAGENTA, WHITE, OFFRED, OFFGREEN, OFFBLUE};
 
 /*----------------------------------------------------------------------------
- * FRONT & READ LEDs
+ * REAR RED LEDs
  *---------------------------------------------------------------------------*/
-#define REAR_LED 16 // PortC Pin 16
+#define PTA1_RLED1  	1										//PTA1_RLED1
+#define PTA2_RLED2  	2										//PTA2_RLED2
+#define PTD4_RLED3  	4										//PTD4_RLED3
+#define PTA12_RLED4 	12										//PTA12_RLED4
+#define PTA4_RLED5  	4										//PTA4_RLED5
+#define PTA5_RLED6  	5										//PTA5_RLED6
+#define PTC8_RLED7  	8										//PTC8_RLED7
+#define PTC9_RLED8  	9										//PTC9_RLED8
 
-const int FRONT_LEDS[] = {7, 0, 3, 4, 5, 6, 10, 11, 12, 13}; // PortC Pin 7 upwards to Pin 13
-#define FRONT_LEDS_LEN (sizeof(FRONT_LEDS) / sizeof(FRONT_LEDS[0]))
+#define RED_MOVE 500 //when moving
+#define RED_STOP 250 //when stationary
 
 /*----------------------------------------------------------------------------
- * Board LEDs
+ * FRONT GREEN LEDs
  *---------------------------------------------------------------------------*/
+#define PTE5_GLED1  	5							//PTE5_GLED1
+#define PTE4_GLED2  	4							//PTE4_GLED2
+#define PTE3_GLED3  	3							//PTE3_GLED3
+#define PTE2_GLED4  	2							//PTE2_GLED4
+#define PTB11_GLED5 	11							//PTB11_GLED5
+#define PTB10_GLED6 	10							//PTB10_GLED6
+#define PTB9_GLED7  	9							//PTB9_GLED7
+#define PTB8_GLED8  	8							//PTB8_GLED8
 
-void InitRGB(void)
-{
-	// Enable Clock to PORTB and PORTD
-	SIM->SCGC5 |= ((SIM_SCGC5_PORTB_MASK) | (SIM_SCGC5_PORTD_MASK));
-	
-	// Configure MUX settings to make all 3 pins GPIO
-	PORTB->PCR[RED_LED] &= ~PORT_PCR_MUX_MASK;
-	PORTB->PCR[RED_LED] |= PORT_PCR_MUX(1);
-	PORTB->PCR[GREEN_LED] &= ~PORT_PCR_MUX_MASK;
-	PORTB->PCR[GREEN_LED] |= PORT_PCR_MUX(1);
-	PORTD->PCR[BLUE_LED] &= ~PORT_PCR_MUX_MASK;
-	PORTD->PCR[BLUE_LED] |= PORT_PCR_MUX(1);
-	
-	// Set Data Direction Registers for PortB and PortD
-	PTB->PDDR |= (MASK32(RED_LED) | MASK32(GREEN_LED));
-	PTD->PDDR |= MASK32(BLUE_LED);
-}
+typedef enum led_number 
+{ 
+	 led_1 = 0,
+	 led_2 = 1,
+	 led_3 = 2,
+	 led_4 = 3,
+	 led_5 = 4,
+	 led_6 = 5,
+	 led_7 = 6,
+	 led_8 = 7
+} led_number_t;
 
-void offRGB() {
-	PTB->PDOR |= MASK32(RED_LED) | MASK32(GREEN_LED); // Switch off GREEN and RED LED
-	PTD->PDOR |= MASK32(BLUE_LED); // Switch off BLUE LED
-}
-
-void led_controls(enum color_t color) {
-	switch(color) {
-    case NONE:
-			break;
-    case RED:
-      PTB->PDOR &= ~MASK32(RED_LED); // Switch on RED LED
-      break;
-    case GREEN:
-      PTB->PDOR &= ~MASK32(GREEN_LED); // Switch on GREEN LED
-      break;
-    case BLUE:
-      PTD->PDOR &= ~MASK32(BLUE_LED); // Switch on BLUE LED
-      break;
-    case MAGENTA:
-      PTB->PDOR &= ~MASK32(RED_LED); // Switch on RED LED
-      PTD->PDOR &= ~MASK32(BLUE_LED); // Switch on BLUE LED
-      break;
-    case CYAN:
-      PTB->PDOR &= ~MASK32(GREEN_LED); // Switch on GREEN LED
-      PTD->PDOR &= ~MASK32(BLUE_LED); // Switch on BLUE LED
-      break;
-    case YELLOW:
-      PTB->PDOR &= ~MASK32(RED_LED); // Switch on RED LED
-      PTB->PDOR &= ~MASK32(GREEN_LED); // Switch on GREEN LED
-      break;
-    case WHITE:
-			PTB->PDOR &= ~MASK32(RED_LED) & ~MASK32(GREEN_LED); // Switch on RED and GREEN LED
-			PTD->PDOR &= ~MASK32(BLUE_LED); // Switch on BLUE LED
-      break;
-		case OFFRED:
-			PTB->PDOR |= MASK32(RED_LED); // Switch off RED LED
-			break;
-		case OFFGREEN:
-			PTB->PDOR |= MASK32(GREEN_LED); // Switch off GREEN
-			break;
-		case OFFBLUE:
-			PTD->PDOR |= MASK32(BLUE_LED); // Switch off BLUE LED
-			break;
-	}
-}
-
-void force_led_color (enum color_t color) {
-	offRGB();
-	led_controls(color);
-}
-		
 /*----------------------------------------------------------------------------
- * FRONT & READ LEDs
+ * Functions
  *---------------------------------------------------------------------------*/
-void InitFrontRearLED(void) {
-    // Enable Clock Gating for PORTC
-    SIM->SCGC5 |= SIM_SCGC5_PORTC_MASK;
-	
-		// Configure MUX to make pins GPIO
-		///*
-		for (int i = 0; i < FRONT_LEDS_LEN; i++) {				
-		    PORTC->PCR[FRONT_LEDS[i]] &= ~PORT_PCR_MUX_MASK;
-        PORTC->PCR[FRONT_LEDS[i]] |= PORT_PCR_MUX(1);
-    }//*/
-    PORTC->PCR[REAR_LED] &= ~PORT_PCR_MUX_MASK;
-    PORTC->PCR[REAR_LED] |= PORT_PCR_MUX(1);
-		
-    // Set Data Direction Registers for PortC
-    for (int i = 0; i < FRONT_LEDS_LEN; i++) {
-        PTC->PDDR |= MASK32(FRONT_LEDS[i]);
-    }
-    PTC->PDDR |= MASK32(REAR_LED);
-}
+
+void InitRGB(void);
+void offRGB(void);
+void led_controls(enum color_t color);
+void make_led_color (enum color_t color);
+
+void initFrontGreenLEDGPIO(void);
+void onFrontGreenLED(void);
+void offFrontGreenLED(void);
+void controlFrontGreenLED(led_number_t number);
+void runFrontGreenLED(void);
+void twoGreenFlash(void);
+
+void initRearRedLEDGPIO(void);
+void offRearRedLED(void);
+void flashRearRedLED(int interval);
+void stopRearRED(void);
+void movingRearRED(void);
+
+#endif // !LED_H
