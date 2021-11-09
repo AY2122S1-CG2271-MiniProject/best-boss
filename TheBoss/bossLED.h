@@ -21,8 +21,8 @@ enum color_t {NONE, RED, GREEN, BLUE, CYAN, YELLOW, MAGENTA, WHITE, OFFRED, OFFG
 #define PTA12_RLED4 	12										//PTA12_RLED4
 #define PTA4_RLED5  	4										//PTA4_RLED5
 #define PTA5_RLED6  	5										//PTA5_RLED6
-#define PTC8_RLED7  	8										//PTC8_RLED7
-#define PTC9_RLED8  	9										//PTC9_RLED8
+#define PTC10_RLED7  	10										//PTC10_RLED7
+#define PTC11_RLED8  	11										//PTC11_RLED8
 
 #define RED_MOVE 500 //when moving
 #define RED_STOP 250 //when stationary

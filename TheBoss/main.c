@@ -124,7 +124,7 @@ void bRedFront(void *arg) {
 int main (void) {
  
   // System Initialization
-  SystemCoreClockUpdate();
+	SystemCoreClockUpdate();
 	
 	initUART2();
 	InitRGB();
@@ -143,13 +143,13 @@ int main (void) {
 	bossBrain = osSemaphoreNew(1,0,NULL);
 	bossAuto = osSemaphoreNew(1,0,NULL);
  
-  osKernelInitialize();                 // Initialize CMSIS-RTOS
-  osThreadNew(bBrain, NULL, NULL);    // Create application brain thread
+	osKernelInitialize();                 // Initialize CMSIS-RTOS
+	osThreadNew(bBrain, NULL, NULL);    // Create application brain thread
 	osThreadNew(bDrive, NULL, NULL);		// Create application drive thread
 	osThreadNew(bAudio, NULL, NULL);    // Create application brain thread
 	osThreadNew(bRedFront, NULL, NULL);		// Create application drive thread
-  osThreadNew(bGreenFront, NULL, NULL);    // Create application brain thread
+	osThreadNew(bGreenFront, NULL, NULL);    // Create application brain thread
 	osThreadNew(bAuto, NULL, NULL);		// Create application drive thread
-  osKernelStart();                      // Start thread execution
+	osKernelStart();                      // Start thread execution
   for (;;) {}
 }
