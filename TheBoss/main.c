@@ -19,6 +19,7 @@
 int statusUpdate = 0;
 void handleConnection(uint8_t option) {
 	statusUpdate = (option == WIFI_CONNECT) ? 1 : 0;
+	osSemaphoreRelease(bossAudio);
 }
 
 void bBrain (void *argument) {
@@ -47,7 +48,8 @@ void bBrain (void *argument) {
 				rewrite_direction(option_n);
 				break;
 			case AUDIO_CONTROL:
-				audio_choice = option_n;
+				overwriteAudio(option_n);
+				osSemaphoreRelease(bossAudio);
 				break;
 			default:
 				//flashRED;
@@ -79,6 +81,7 @@ void bAuto (void *arg) {
 
 void bAudio (void *arg) {
 	for(;;) {
+		osSemaphoreAcquire(bossAudio, osWaitForever);
 		switch(audio_choice) {
 			case SILENCE:
 				stop_music();
@@ -88,9 +91,11 @@ void bAudio (void *arg) {
 				break;
 			case ENDING_TIME:
 				play_end_song();
+				audio_choice = 0x00;
 				break;
 			case WIFI_CONNECT:
 				play_wifi_song();
+				audio_choice = 0x00;
 				break;
 		}
 	}
@@ -142,6 +147,7 @@ int main (void) {
 	
 	bossBrain = osSemaphoreNew(1,0,NULL);
 	bossAuto = osSemaphoreNew(1,0,NULL);
+	bossAudio = osSemaphoreNew(1,0,NULL);
  
 	osKernelInitialize();                 // Initialize CMSIS-RTOS
 	osThreadNew(bBrain, NULL, NULL);    // Create application brain thread

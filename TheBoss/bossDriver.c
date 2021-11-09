@@ -174,7 +174,6 @@ void stop(void) {
 }
 
 void rewrite_driveMode(uint8_t optionNumber) {
-	driveInstructions = 0x00;
 	NorthSouth = DRIVE_BACK_GO(optionNumber);
 	driveInstructions = MERGE_INSTRUCTIONS(NorthSouth, EastWest);
 	switch (optionNumber) {
@@ -196,7 +195,6 @@ void rewrite_driveMode(uint8_t optionNumber) {
 }
 
 void rewrite_direction(uint8_t optionNumber) {
-	driveInstructions = 0x00;
 	EastWest = DRIVE_WAY(optionNumber);
 	driveInstructions = MERGE_INSTRUCTIONS(EastWest, NorthSouth);
 	switch (optionNumber) {
