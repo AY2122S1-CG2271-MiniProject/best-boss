@@ -192,16 +192,20 @@ int main (void) {
 	InitRGB();
 	initFrontGreenLEDGPIO();
 	initRearRedLEDGPIO();
-	InitMotor();
+	InitMotor(); //+Sensor within
 	InitAudio();
 	
 	stop();
 	offRGB();
 	offRearRedLED();
 	offFrontGreenLED();
+	while(1){
+		sensorDistance = checkDistance();
+	}
 	
   // ...
 	
+	/*
 	bossBrain = osSemaphoreNew(1,0,NULL);
 	bossAuto = osSemaphoreNew(1,0,NULL);
 	bossConnect = osSemaphoreNew(1,0,NULL);
@@ -216,4 +220,5 @@ int main (void) {
 	osThreadNew(bAuto, NULL, NULL);		// Create application drive thread
 	osKernelStart();                      // Start thread execution
   for (;;) {}
+	*/
 }
