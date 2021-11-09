@@ -9,9 +9,7 @@ extern osSemaphoreId_t bossBrain;			//semaphore id
 extern osSemaphoreId_t bossDrive;                  // semaphore id
 extern osSemaphoreId_t bossLED;                  // semaphore id
 extern osSemaphoreId_t bossVoice;                  // semaphore id
+extern osSemaphoreId_t bossConnect;                  // semaphore id
 
 extern int auto_modeOn;
 extern uint8_t audio_choice;
-
-extern int statusUpdate;
-

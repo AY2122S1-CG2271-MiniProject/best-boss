@@ -442,6 +442,11 @@
               <FileType>1</FileType>
               <FilePath>.\bossUART.c</FilePath>
             </File>
+            <File>
+              <FileName>Mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Mutex.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

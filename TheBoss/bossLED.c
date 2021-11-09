@@ -308,10 +308,11 @@ void runFrontGreenLED(void) {
 //8 Front Green LED flashes after establishing wifi
 void twoGreenFlash(void) {
 	for (int i = 0; i < 2 ; i++) {
+		offFrontGreenLED();
+		osDelay(150);
 		onFrontGreenLED();
 		osDelay(150);
 		offFrontGreenLED();
 		osDelay(150);
-		statusUpdate = 0;
 	}
 }

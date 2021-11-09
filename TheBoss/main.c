@@ -9,17 +9,40 @@
 #include "bossBrain.h"
 #include "bossUART.h"
 
-
 //osSemaphoreId_t bossBrain;			//semaphore id
+
+uint8_t rx_data;
+
+void UART2_IRQHandler(void) {
+	NVIC_ClearPendingIRQ(UART2_IRQn);
+	
+	if (UART2->S1 & UART_S1_RDRF_MASK) {
+		rx_data = UART2->D;	
+		osSemaphoreRelease(bossBrain);
+	}
+}
+
+/*
+uint8_t getType(void) {
+	return REQUEST_MASK(rx_data);
+}
+
+uint8_t getOption(void) {
+	return OPTION_MASK(rx_data);
+}
+*/
 
 /*----------------------------------------------------------------------------
  * Application main thread
  *---------------------------------------------------------------------------*/
+uint8_t savedStatus = 0x00;
 
-int statusUpdate = 0;
+int statusGet(void) {
+	return savedStatus;
+}
+
 void handleConnection(uint8_t option) {
-	statusUpdate = (option == WIFI_CONNECT) ? 1 : 0;
-	osSemaphoreRelease(bossAudio);
+	savedStatus = rx_data;
 }
 
 void bBrain (void *argument) {
@@ -28,8 +51,8 @@ void bBrain (void *argument) {
 		osSemaphoreAcquire(bossBrain,osWaitForever);
 		
 		uint8_t request_t, option_n;
-		request_t = getType();
-		option_n = getOption();
+		request_t = REQUEST_MASK(rx_data);
+		option_n = OPTION_MASK(rx_data);
 		
 		switch (request_t) {
 			case DEFAULT_FUNCTIONS:
@@ -37,7 +60,9 @@ void bBrain (void *argument) {
 				if (option_n == AUTOSEMAPHORE) {
 					osSemaphoreRelease(bossAuto);
 				}
+				else if (option_n == WIFI_CONNECT) {
 				handleConnection(option_n);
+				}
 				//Connect wifi to board (green led flash) & Auto Mode
 				//Auto: 0x02 ; StopAuto: 0x03 ; Connect: 0x01
 				break;
@@ -49,8 +74,22 @@ void bBrain (void *argument) {
 				break;
 			case AUDIO_CONTROL:
 				overwriteAudio(option_n);
-				osSemaphoreRelease(bossAudio);
-				break;
+				switch(audio_choice) {
+					case SILENCE:
+						stop_music();
+						break;
+					case ENDING_TIME:
+						play_end_song();
+						audio_choice = SILENCE;
+						break;
+					case WIFI_CONNECT:
+						play_wifi_song();
+						audio_choice = SILENCE;
+						break;
+					default:
+						stop_music();
+						break;
+				}
 			default:
 				//flashRED;
 				stop();
@@ -69,6 +108,7 @@ void bDrive (void *arg) {
 	for (;;) {
 		osSemaphoreAcquire(bossDrive, osWaitForever);
 		executeDrive();
+		osSemaphoreRelease(bossLED);
 	}
 }
 
@@ -82,31 +122,40 @@ void bAuto (void *arg) {
 void bAudio (void *arg) {
 	for(;;) {
 		osSemaphoreAcquire(bossAudio, osWaitForever);
-		switch(audio_choice) {
-			case SILENCE:
-				stop_music();
-				break;
-			case CHALLENGE_TIME:
-				play_moving_song();
-				break;
-			case ENDING_TIME:
-				play_end_song();
-				audio_choice = 0x00;
-				break;
-			case WIFI_CONNECT:
-				play_wifi_song();
-				audio_choice = 0x00;
-				break;
-		}
+		play_moving_song();
+		osSemaphoreDelete(bossAudio);
+	}
+}
+
+void bIntAudio (void *arg) {
+	osSemaphoreAcquire(bossAudio, osWaitForever);
+	switch(audio_choice) {
+		case SILENCE:
+			stop_music();
+			break;
+		case ENDING_TIME:
+			play_end_song();
+			audio_choice = SILENCE;
+			break;
+		case WIFI_CONNECT:
+			play_wifi_song();
+			audio_choice = SILENCE;
+			break;
+	}
+}
+
+void bConnect(void*arg) {
+	for (;;) {
+		osSemaphoreAcquire(bossConnect, osWaitForever);
+		twoGreenFlash();
+		osSemaphoreRelease(bossLED);
 	}
 }
 
 void bGreenFront(void *arg) {
 	for(;;) {
-		if (statusUpdate == 1) {
-			twoGreenFlash();
-		}
-		else if (isDriving() == 1) {
+		osSemaphoreAcquire(bossLED, osWaitForever);
+		if (isDriving() == 1) {
 			runFrontGreenLED();
 		}
 		else if (isDriving() == 0) {
@@ -147,7 +196,8 @@ int main (void) {
 	
 	bossBrain = osSemaphoreNew(1,0,NULL);
 	bossAuto = osSemaphoreNew(1,0,NULL);
-	bossAudio = osSemaphoreNew(1,0,NULL);
+	bossConnect = osSemaphoreNew(1,0,NULL);
+	bossLED = osSemaphoreNew(1,0,NULL);
  
 	osKernelInitialize();                 // Initialize CMSIS-RTOS
 	osThreadNew(bBrain, NULL, NULL);    // Create application brain thread
