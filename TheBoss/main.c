@@ -8,7 +8,7 @@
 #include "bossLED.h"
 #include "bossBrain.h"
 #include "bossUART.h"
-#include "bossSensor.h"
+//#include "bossSensor.h"
 
 
 //osSemaphoreId_t bossBrain;			//semaphore id
@@ -78,8 +78,8 @@ volatile float sensorDistance = 0.0;
 void bAuto (void *arg) {
 	for (;;) {
 		osSemaphoreAcquire(bossAuto, osWaitForever);
-		sensorDistance = checkDistance();
-		driverless_mode(AUTO, sensorDistance);
+		//sensorDistance = checkDistance();
+		//driverless_mode(AUTO, sensorDistance);
 	}
 }
 
