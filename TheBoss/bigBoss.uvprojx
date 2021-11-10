@@ -442,6 +442,16 @@
               <FileType>1</FileType>
               <FilePath>.\bossUART.c</FilePath>
             </File>
+            <File>
+              <FileName>bossSensor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\bossSensor.h</FilePath>
+            </File>
+            <File>
+              <FileName>bossSensor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\bossSensor.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

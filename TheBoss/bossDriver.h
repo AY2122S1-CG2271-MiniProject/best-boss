@@ -7,12 +7,14 @@ enum move_t { AUTO, STOP, FORWARD, REVERSE, CURVE_LEFT, CURVE_RIGHT, TURN_LEFT, 
 //Store Drive Instructions
 
 // SENSOR
-#define TRIG_PIN 5 // PortD Pin 5
-#define ECHO_PIN 6 // PortD Pin 6
+#define ECHO_PIN 13 // Porta Pin 13
+#define TRIG_PIN 6 // PortD Pin 6
 
 //driver functions
+void InitSensor(void);
 void InitMotor(void);
-void FrontReverseRear(void);
+void leftReverse(void);
+void rightReverse(void);
 void forward(void);
 void reverse(void);
 void motor_control(enum move_t move);

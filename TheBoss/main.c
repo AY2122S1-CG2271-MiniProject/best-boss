@@ -30,7 +30,7 @@ typedef struct {
 	uint8_t opt_n;
 }myDataPack;
 
-osMessageQueueId_t brainQ, driveQ, audioQ, redQ, greenQ, muteQ;
+osMessageQueueId_t brainQ, driveQ, audioQ, redQ, greenQ, muteQ, sensorQ;
 
 void UART2_IRQHandler(void) {
 	NVIC_ClearPendingIRQ(UART2_IRQn);
@@ -113,6 +113,7 @@ void bBrain (void *argument) {
 		osMessageQueuePut(redQ, &myData, NULL, 0);
 		osMessageQueuePut(greenQ, &myData, NULL, 0);
 		osMessageQueuePut(muteQ, &myData, NULL, 0);
+		//osMessageQueuePut(sensorQ, &myData, NULL, 0);
 	}
 }
 
@@ -129,11 +130,7 @@ void bDrive (void *arg) {
 	for (;;) {
 		osMessageQueueGet(driveQ, &myData, NULL, 0);
 		if (driverless == USER_AUTO) {
-			driverless = END_AUTO;
-			twoGreenFlash();
-			osDelay(500);
-			runFrontGreenLED();
-			osMessageQueuePut(driveQ, &myData, NULL, 0);
+			osMessageQueuePut(sensorQ, &myData, NULL, 0);
 		}
 		else {
 			executeDrive();
@@ -240,11 +237,55 @@ void bRedFront(void *arg) {
 		}
 	}
 }
+
+
+void bSensor(void* arg) {
+	myDataPack myData;
+
+	myData.req_t = 0xFF;
+	myData.opt_n = 0xFF;
+	maincounter = 0;
+
+	for (;;) {
+		osMessageQueueGet(sensorQ, &myData, NULL, 0);
+		
+		if (driverless == USER_AUTO) {
+			read = 0;
+
+
+			maincounter++;
+			read = readUltrasonic();
+			delay(0x18e70);
+			
+			/*
+			driverless_mode(AUTO , 10);
+			*/
+			osMessageQueuePut(brainQ, &myData, NULL, 0);
+		}
+		else if (driverless == END_AUTO) {
+			/* initUART2();
+			InitRGB();
+			initFrontGreenLEDGPIO();
+			initRearRedLEDGPIO();
+			InitMotor(); //+Sensor within
+			InitAudio(); */
+			osMessageQueuePut(brainQ, &myData, NULL, 0);
+		}
+		//maincounter++;
+		//read = readUltrasonic();
+		//osDelay(2);//delay(0x18e70); // 1ms? 1ms / (128/48Mhz)
+		//sensorDistance = checkDistance();
+	}
+}
+
  
 int main (void) {
  
   // System Initialization
 	SystemCoreClockUpdate();
+	
+	initUltrasonic();
+
 	
 	initUART2();
 	InitRGB();
@@ -253,30 +294,38 @@ int main (void) {
 	InitMotor(); //+Sensor within
 	InitAudio();
 	
+	//stop();
+	//offRGB();
+	//offRearRedLED();
+	//offFrontGreenLED();
+	//play_end_song();
 	/*
-	stop();
-	offRGB();
-	offRearRedLED();
-	offFrontGreenLED();
-	while(1){
-		sensorDistance = checkDistance();
-	}*/
- 
+	while (1)
+	{
+		maincounter++;
+		read = readUltrasonic();
+		delay(0x18e70); // 1ms? 1ms / (128/48Mhz)*/
+	//}
+	
+	
 	osKernelInitialize();                 // Initialize CMSIS-RTOS
 	osThreadNew(bBrain, NULL, NULL);    // Create application brain thread
 	osThreadNew(bDrive, NULL, NULL);		// Create application drive thread
-	osThreadNew(bAudio, NULL, NULL);    // Create application brain thread
-	osThreadNew(bRedFront, NULL, NULL);		// Create application drive thread
-	osThreadNew(bGreenFront, NULL, NULL);    // Create application brain thread
-	osThreadNew(bMute, NULL, NULL);		// Create application drive thread
+	osThreadNew(bAudio, NULL, NULL);    // Create application audio thread
+	osThreadNew(bRedFront, NULL, NULL);		// Create application redLEDs thread
+	osThreadNew(bGreenFront, NULL, NULL);    // Create application greenLEDs thread
+	osThreadNew(bMute, NULL, NULL);		// Create application to mute speaker thread
+	osThreadNew(bSensor, NULL, NULL);		// Create application Sensor thread
 
 	brainQ = osMessageQueueNew(MSG_COUNT, sizeof(myDataPack), NULL);
 	driveQ = osMessageQueueNew(MSG_COUNT, sizeof(myDataPack), NULL);
 	audioQ = osMessageQueueNew(MSG_COUNT, sizeof(myDataPack), NULL);
 	redQ = osMessageQueueNew(MSG_COUNT, sizeof(myDataPack), NULL);
 	greenQ = osMessageQueueNew(MSG_COUNT, sizeof(myDataPack), NULL);
-	muteQ = osMessageQueueNew(MSG_COUNT, sizeof(uint8_t), NULL);
+	muteQ = osMessageQueueNew(MSG_COUNT, sizeof(myDataPack), NULL);
+	sensorQ = osMessageQueueNew(MSG_COUNT, sizeof(myDataPack), NULL);
 
 	osKernelStart();                      // Start thread execution
   for (;;) {}
+	
 }
