@@ -1,7 +1,7 @@
 #include "commonHeads.h"
 
-#ifndef BOSSUART_H
-#define BOSSUART_H
+//#ifndef BOSSUART_H
+//#define BOSSUART_H
 
 #define BAUD_RATE 9600
 
@@ -25,12 +25,12 @@
 #define DIRECTION_OPTIONS 0x20
 #define AUDIO_CONTROL 0x30
 
+#define INIT 0xFF
+
 /*----------------------------------------------------------------------------
  * Functions
  *---------------------------------------------------------------------------*/
 void initUART2(void);
 void UART2_IRQHandler(void);
-uint8_t getType(void);
-uint8_t getOption(void);
 
-#endif // !BOSSUART_H
+//#endif // !BOSSUART_H

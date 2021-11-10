@@ -25,7 +25,12 @@ void InitAudio(void) {
 	TPM1->MOD = mod;
 	TPM1_C0V = mod / 3;
 	
-	int audio_choice = 0x00;
+	//int audio_choice = 0x00;
+}
+
+void stop_music(void) {
+	TPM1_C0SC &= ~((TPM_CnSC_ELSB_MASK) | (TPM_CnSC_ELSA_MASK) |
+		(TPM_CnSC_MSB_MASK) | (TPM_CnSC_MSA_MASK));
 }
 
 void play_note(uint32_t freq) {
@@ -34,11 +39,6 @@ void play_note(uint32_t freq) {
 	TPM1_C0V = mod / 3;
 	TPM1_C0SC &= ~((TPM_CnSC_ELSB_MASK) | (TPM_CnSC_ELSA_MASK) | (TPM_CnSC_MSB_MASK) | (TPM_CnSC_MSA_MASK));
 	TPM1_C0SC |= (TPM_CnSC_ELSB(1) | TPM_CnSC_MSB(1));
-}
-
-void stop_music(void) {
-	TPM1_C0SC &= ~((TPM_CnSC_ELSB_MASK) | (TPM_CnSC_ELSA_MASK) |
-		(TPM_CnSC_MSB_MASK) | (TPM_CnSC_MSA_MASK));
 }
 
 void overwriteAudio(uint8_t audioChoice) {
@@ -163,7 +163,7 @@ void play_moving_song(void) {
 	osDelay(500);
 	play_note(NOTE_A);
 	osDelay(500);
-
+/*
 	stop_music();
 	osDelay(500);
 	play_note(NOTE_DU);
@@ -202,7 +202,7 @@ void play_moving_song(void) {
 	osDelay(500);
 	play_note(NOTE_A);
 	osDelay(500);
-
+*/
 	stop_music();
 	osDelay(200);
 }
