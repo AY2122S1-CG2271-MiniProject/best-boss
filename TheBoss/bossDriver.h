@@ -3,8 +3,12 @@
 #ifndef DRIVER_H
 #define DRIVER_H
 
-enum move_t { STOP, FORWARD, REVERSE, CURVE_LEFT, CURVE_RIGHT, TURN_LEFT, TURN_RIGHT, REVERSE_LEFT, REVERSE_RIGHT };
+enum move_t { AUTO, STOP, FORWARD, REVERSE, CURVE_LEFT, CURVE_RIGHT, TURN_LEFT, TURN_RIGHT, REVERSE_LEFT, REVERSE_RIGHT};
 //Store Drive Instructions
+
+// SENSOR
+#define TRIG_PIN 5 // PortD Pin 5
+#define ECHO_PIN 6 // PortD Pin 6
 
 //driver functions
 void InitMotor(void);
@@ -17,7 +21,7 @@ void rewrite_driveMode(uint8_t optionNumber);
 void rewrite_direction(uint8_t optionNumber);
 void executeDrive(void);
 int isDriving(void);
-void driverless_mode(void);
+void driverless_mode(enum move_t move, int distance);
 void handleAutoSwitch(uint8_t option);
 
 // Movement

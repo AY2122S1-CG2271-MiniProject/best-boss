@@ -4,7 +4,7 @@
 #define BOSSVOICE_H
 
 // PWM Pins
-#define SPEAKER 3					//PTB3
+#define SPEAKER 0					//PTB0
 
 #define NOTE_CD notes[0]
 #define NOTE_D notes[1]
@@ -33,5 +33,6 @@ void stop_music(void);
 void play_end_song(void);
 void play_moving_song(void);
 void play_wifi_song(void);
+void overwriteAudio(uint8_t audioChoice);
 
 #endif // !BOSSVOICE_H

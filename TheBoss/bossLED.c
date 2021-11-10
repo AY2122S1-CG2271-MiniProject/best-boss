@@ -100,11 +100,11 @@ void initRearRedLEDGPIO(void) {
 	PORTA->PCR[PTA5_RLED6] &= ~PORT_PCR_MUX_MASK;
 	PORTA->PCR[PTA5_RLED6] |= PORT_PCR_MUX(1);
 	
-	PORTC->PCR[PTC8_RLED7] &= ~PORT_PCR_MUX_MASK;
-	PORTC->PCR[PTC8_RLED7] |= PORT_PCR_MUX(1);
+	PORTC->PCR[PTC10_RLED7] &= ~PORT_PCR_MUX_MASK;
+	PORTC->PCR[PTC10_RLED7] |= PORT_PCR_MUX(1);
 	
-	PORTC->PCR[PTC9_RLED8] &= ~PORT_PCR_MUX_MASK;
-	PORTC->PCR[PTC9_RLED8] |= PORT_PCR_MUX(1);
+	PORTC->PCR[PTC11_RLED8] &= ~PORT_PCR_MUX_MASK;
+	PORTC->PCR[PTC11_RLED8] |= PORT_PCR_MUX(1);
 	
 	// Set pins as output
 	PTA->PDDR |= (MASK(PTA1_RLED1) | 
@@ -113,8 +113,8 @@ void initRearRedLEDGPIO(void) {
 								MASK(PTA5_RLED6) | 
 								MASK(PTA12_RLED4));
 								
-	PTC->PDDR |= (MASK(PTC8_RLED7) | 
-								MASK(PTC9_RLED8));
+	PTC->PDDR |= (MASK(PTC10_RLED7) | 
+								MASK(PTC11_RLED8));
 								
 	PTD->PDDR |= 	MASK(PTD4_RLED3);
 }
@@ -128,8 +128,8 @@ void onRearRedLED(void) {
 								MASK(PTA5_RLED6) | 
 								MASK(PTA12_RLED4));
 	
-	PTC->PSOR |= (MASK(PTC8_RLED7) | 
-								MASK(PTC9_RLED8));
+	PTC->PSOR |= (MASK(PTC10_RLED7) | 
+								MASK(PTC11_RLED8));
 	
 	PTD->PSOR |= 	MASK(PTD4_RLED3);
 }
@@ -143,8 +143,8 @@ void offRearRedLED(void) {
 								MASK(PTA5_RLED6) | 
 								MASK(PTA12_RLED4));
 	
-	PTC->PCOR |= (MASK(PTC8_RLED7) | 
-								MASK(PTC9_RLED8));
+	PTC->PCOR |= (MASK(PTC10_RLED7) | 
+								MASK(PTC11_RLED8));
 	
 	PTD->PCOR |= 	MASK(PTD4_RLED3);
 }
@@ -308,10 +308,11 @@ void runFrontGreenLED(void) {
 //8 Front Green LED flashes after establishing wifi
 void twoGreenFlash(void) {
 	for (int i = 0; i < 2 ; i++) {
+		offFrontGreenLED();
+		osDelay(150);
 		onFrontGreenLED();
 		osDelay(150);
 		offFrontGreenLED();
 		osDelay(150);
-		statusUpdate = 0;
 	}
 }

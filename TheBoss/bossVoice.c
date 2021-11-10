@@ -20,16 +20,12 @@ void InitAudio(void) {
 	TPM1->SC &= ~((TPM_SC_CMOD_MASK) | (TPM_SC_PS_MASK));
 	TPM1->SC |= (TPM_SC_CMOD(1) | TPM_SC_PS(7));
 	TPM1->SC &= ~(TPM_SC_CPWMS_MASK);
-}
-
-void play_note(uint32_t freq) {
-	TPM1_C0SC &= ~((TPM_CnSC_ELSB_MASK) | (TPM_CnSC_ELSA_MASK) |
-		(TPM_CnSC_MSB_MASK) | (TPM_CnSC_MSA_MASK));
-	uint32_t mod = 48E6 / (128 * freq);
+	
+	uint32_t mod = 48E6 / (128 * 1047);
 	TPM1->MOD = mod;
-	TPM1_C0V = mod / 2;
-	TPM1_CNT = 0;
-	TPM1_C0SC |= (TPM_CnSC_ELSB(1) | TPM_CnSC_MSB(1));
+	TPM1_C0V = mod / 3;
+	
+	//int audio_choice = 0x00;
 }
 
 void stop_music(void) {
@@ -37,162 +33,196 @@ void stop_music(void) {
 		(TPM_CnSC_MSB_MASK) | (TPM_CnSC_MSA_MASK));
 }
 
+void play_note(uint32_t freq) {
+	uint32_t mod = 48E6 / (128 * freq);
+	TPM1->MOD = mod;
+	TPM1_C0V = mod / 3;
+	TPM1_C0SC &= ~((TPM_CnSC_ELSB_MASK) | (TPM_CnSC_ELSA_MASK) | (TPM_CnSC_MSB_MASK) | (TPM_CnSC_MSA_MASK));
+	TPM1_C0SC |= (TPM_CnSC_ELSB(1) | TPM_CnSC_MSB(1));
+}
+
+void overwriteAudio(uint8_t audioChoice) {
+	audio_choice = audioChoice;
+}
+
+/*
+void delays(int rep) {
+  int i = rep;
+  while (i > 0) {
+    osDelay(50);
+    i--;
+  }
+}
+//*/
+
 void play_end_song(void) {
 	play_note(NOTE_CD);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_CD);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_A);
-	osDelay(4800);
+	osDelay(1250);
 	play_note(NOTE_F);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_G);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_F);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_D);
-	osDelay(4000);
+	osDelay(125);
 	stop_music();
-	osDelay(800);
+	osDelay(250);
 
 	play_note(NOTE_D);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_D);
-	osDelay(800);
+	osDelay(250);
 	play_note(Asharp);
-	osDelay(4800);
+	osDelay(1250);
 	play_note(NOTE_G);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_A);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_G);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_E);
-	osDelay(4000);
+	osDelay(125);
 	stop_music();
-	osDelay(800);
+	osDelay(250);
 
 	play_note(NOTE_E);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_E);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_CU);
-	osDelay(4800);
-	play_note(NOTE_A);
-	osDelay(800);
-	play_note(Asharp);
-	osDelay(800);
-	play_note(NOTE_CU);
-	osDelay(800);
-	play_note(NOTE_DU);
-	osDelay(4000);
-	stop_music();
-	osDelay(800);
-
-	play_note(NOTE_F);
-	osDelay(800);
-	play_note(NOTE_G);
-	osDelay(800);
-	play_note(NOTE_A);
-	osDelay(3200);
-	play_note(NOTE_G);
-	osDelay(3200);
-	play_note(NOTE_F);
-	osDelay(800);
-	play_note(NOTE_F);
-	osDelay(4000);
-
-	stop_music();
 	osDelay(1000);
+	play_note(NOTE_A);
+	osDelay(250);
+	play_note(Asharp);
+	osDelay(250);
+	play_note(NOTE_CU);
+	osDelay(250);
+	play_note(NOTE_DU);
+	osDelay(125);
+	stop_music();
+	osDelay(250);
+
+	play_note(NOTE_F);
+	osDelay(250);
+	play_note(NOTE_G);
+	osDelay(250);
+	play_note(NOTE_A);
+	osDelay(1000);
+	play_note(NOTE_G);
+	osDelay(1000);
+	play_note(NOTE_F);
+	osDelay(250);
+	play_note(NOTE_F);
+	osDelay(125);
+
+	stop_music();
+	osDelay(10);
 }
 
 void play_moving_song(void) {
 	play_note(NOTE_EU);
-	osDelay(1600);
+	osDelay(500);
 	play_note(NOTE_B);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_CU);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_DU);
-	osDelay(1600);
+	osDelay(500);
 	play_note(NOTE_CU);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_B);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_A);
-	osDelay(2400);
+	osDelay(750);
 	play_note(NOTE_CU);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_EU);
-	osDelay(1600);
+	osDelay(500);
 	play_note(NOTE_DU);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_CU);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_B);
-	osDelay(1600);
+	osDelay(500);
 	play_note(NOTE_B);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_CU);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_DU);
-	osDelay(1600);
+	osDelay(500);
 	play_note(NOTE_EU);
-	osDelay(1600);
+	osDelay(500);
 	play_note(NOTE_CU);
-	osDelay(1600);
+	osDelay(500);
 	play_note(NOTE_A);
-	osDelay(1600);
+	osDelay(500);
 	play_note(NOTE_A);
-	osDelay(1600);
-
+	osDelay(500);
+/*
 	stop_music();
-	osDelay(1600);
+	osDelay(500);
 	play_note(NOTE_DU);
-	osDelay(2400);
+	osDelay(750);
 	play_note(NOTE_FU);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_AU);
-	osDelay(1600);
+	osDelay(500);
 	play_note(NOTE_GU);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_FU);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_EU);
-	osDelay(2400);
+	osDelay(750);
 	play_note(NOTE_CU);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_EU);
-	osDelay(1600);
+	osDelay(500);
 	play_note(NOTE_DU);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_CU);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_B);
-	osDelay(1600);
+	osDelay(500);
 	play_note(NOTE_B);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_CU);
-	osDelay(800);
+	osDelay(250);
 	play_note(NOTE_DU);
-	osDelay(1600);
+	osDelay(500);
 	play_note(NOTE_EU);
-	osDelay(1600);
+	osDelay(500);
 	play_note(NOTE_CU);
-	osDelay(1600);
+	osDelay(500);
 	play_note(NOTE_A);
-	osDelay(1600);
+	osDelay(500);
 	play_note(NOTE_A);
-	osDelay(1600);
-
+	osDelay(500);
+*/
 	stop_music();
-	osDelay(1000);
+	osDelay(200);
 }
 
 void play_wifi_song(void) {
 	play_note(NOTE_A);
-	osDelay(1600);
+	osDelay(500);
 	
 	stop_music();
-	osDelay(1600);
+	osDelay(500);
+	
+	play_note(NOTE_A);
+	osDelay(500);
+	
+	stop_music();
+	osDelay(500);
+	
+	play_note(NOTE_A);
+	osDelay(500);
+	
+	stop_music();
+	osDelay(500);
 }
