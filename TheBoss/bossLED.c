@@ -82,8 +82,8 @@ void initRearRedLEDGPIO(void) {
 	SIM->SCGC5 |= ((SIM_SCGC5_PORTA_MASK) | (SIM_SCGC5_PORTC_MASK)| (SIM_SCGC5_PORTD_MASK));
 	
 	// Make pins GPIO
-	PORTA->PCR[PTA1_RLED1] &= ~PORT_PCR_MUX_MASK;
-	PORTA->PCR[PTA1_RLED1] |= PORT_PCR_MUX(1);
+	PORTC->PCR[PTC7_RLED1] &= ~PORT_PCR_MUX_MASK;
+	PORTC->PCR[PTC7_RLED1] |= PORT_PCR_MUX(1);
 	
 	PORTA->PCR[PTA2_RLED2] &= ~PORT_PCR_MUX_MASK;
 	PORTA->PCR[PTA2_RLED2] |= PORT_PCR_MUX(1);
@@ -107,7 +107,7 @@ void initRearRedLEDGPIO(void) {
 	PORTC->PCR[PTC11_RLED8] |= PORT_PCR_MUX(1);
 	
 	// Set pins as output
-	PTA->PDDR |= (MASK(PTA1_RLED1) | 
+	PTA->PDDR |= (MASK(PTC7_RLED1) | 
 								MASK(PTA2_RLED2) | 
 								MASK(PTA4_RLED5) | 
 								MASK(PTA5_RLED6) | 
@@ -122,7 +122,7 @@ void initRearRedLEDGPIO(void) {
 // 8 Rear Red LEDs are switched on
 void onRearRedLED(void) {
 	//set output register
-	PTA->PSOR |= (MASK(PTA1_RLED1) | 
+	PTA->PSOR |= (MASK(PTC7_RLED1) | 
 								MASK(PTA2_RLED2) | 
 								MASK(PTA4_RLED5) | 
 								MASK(PTA5_RLED6) | 
@@ -137,7 +137,7 @@ void onRearRedLED(void) {
 // 8 Rear Red LEDs are switched off
 void offRearRedLED(void) {
 	//clear output register
-	PTA->PCOR |= (MASK(PTA1_RLED1) | 
+	PTA->PCOR |= (MASK(PTC7_RLED1) | 
 								MASK(PTA2_RLED2) | 
 								MASK(PTA4_RLED5) | 
 								MASK(PTA5_RLED6) | 

@@ -4,7 +4,7 @@
 #define BOSSVOICE_H
 
 // PWM Pins
-#define SPEAKER 0					//PTB0
+#define SPEAKER 1					//PTA1
 
 #define NOTE_CD notes[0]
 #define NOTE_D notes[1]

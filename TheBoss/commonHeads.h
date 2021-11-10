@@ -7,3 +7,7 @@
 
 extern int auto_modeOn;
 extern uint8_t audio_choice;
+
+extern volatile int ready;
+extern volatile uint16_t maincounter;
+extern volatile uint16_t read;
