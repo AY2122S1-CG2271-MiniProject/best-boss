@@ -211,8 +211,8 @@ void stop(void) {
 
 void rewrite_driveMode(uint8_t optionNumber) {
 	NorthSouth = DRIVE_BACK_GO(optionNumber);
-	driveInstructions = MERGE_INSTRUCTIONS(NorthSouth, EastWest);
-	switch (optionNumber) {
+	driveInstructions = MERGE_INSTRUCTIONS(EastWest, NorthSouth);
+	/*switch (optionNumber) {
 	case USER_STOP:
 		forward();
 		driveInstructions = STOP;
@@ -227,7 +227,7 @@ void rewrite_driveMode(uint8_t optionNumber) {
 		//flashRedLight
 		stop();
 		break;
-	}
+	}*/
 }
 
 void rewrite_direction(uint8_t optionNumber) {

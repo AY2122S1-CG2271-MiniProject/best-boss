@@ -163,7 +163,7 @@ void play_moving_song(void) {
 	osDelay(500);
 	play_note(NOTE_A);
 	osDelay(500);
-
+/*
 	stop_music();
 	osDelay(500);
 	play_note(NOTE_DU);
@@ -202,7 +202,7 @@ void play_moving_song(void) {
 	osDelay(500);
 	play_note(NOTE_A);
 	osDelay(500);
-
+*/
 	stop_music();
 	osDelay(200);
 }

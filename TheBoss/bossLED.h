@@ -55,6 +55,8 @@ typedef enum led_number
  * Functions
  *---------------------------------------------------------------------------*/
 
+#define OFFLED 0xFE
+
 void InitRGB(void);
 void offRGB(void);
 void led_controls(enum color_t color);
