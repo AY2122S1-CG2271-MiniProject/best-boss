@@ -47,7 +47,7 @@ void UART2_IRQHandler(void) {
 			audio_choice = SILENCE;
 			stop_music();
 			muteTrig = MUTE;
-			osMessageQueuePut(brainQ, &myData, NULL, 0);
+			osMessageQueuePut(audioQ, &myData, NULL, 0);
 		} 
 		else {
 			muteTrig = 0x00;
@@ -60,7 +60,7 @@ void UART2_IRQHandler(void) {
 		else if (rx_data == 0x01) {				//0x01 is Connect
 			connect = CONNECTING;
 			audio_choice = WIFI_CONNECT;
-			osMessageQueuePut(brainQ, &myData, NULL, 0);
+			osMessageQueuePut(audioQ, &myData, NULL, 0);
 		}
 
 		connect = CONNECTED;
@@ -72,19 +72,24 @@ void UART2_IRQHandler(void) {
 				driverless = myData.opt_n;
 			} else {
 				connect = CONNECTING;
+				osMessageQueuePut(audioQ, &myData, NULL, 0);
 			}
 			break;
 		case DRIVEMODES:
 			rewrite_driveMode(myData.opt_n);
-			osMessageQueuePut(brainQ, &myData, NULL, 0);
+			osMessageQueuePut(driveQ, &myData, NULL, 0);
+
+			//osMessageQueuePut(brainQ, &myData, NULL, 0);
 			break;
 		case DIRECTION_OPTIONS:
 			rewrite_direction(myData.opt_n);
-			osMessageQueuePut(brainQ, &myData, NULL, 0);
+			osMessageQueuePut(driveQ, &myData, NULL, 0);
+
+			//osMessageQueuePut(brainQ, &myData, NULL, 0);
 			break;
 		case AUDIO_CONTROL:
 			overwriteAudio(myData.opt_n);
-			osMessageQueuePut(brainQ, &myData, NULL, 0);
+			//osMessageQueuePut(brainQ, &myData, NULL, 0);
 		default:
 			//flashRED;
 			stop();
@@ -107,13 +112,15 @@ void bBrain (void *argument) {
 	myData.opt_n = 0xFF;
   // ...
   for (;;) {
-	  osMessageQueueGet(brainQ, &myData, NULL, 0);
-		osMessageQueuePut(driveQ, &myData, NULL, 0);
+	  osMessageQueueGet(brainQ, &myData, NULL, osWaitForever);
 		osMessageQueuePut(audioQ, &myData, NULL, 0);
 		osMessageQueuePut(redQ, &myData, NULL, 0);
 		osMessageQueuePut(greenQ, &myData, NULL, 0);
 		osMessageQueuePut(muteQ, &myData, NULL, 0);
-		//osMessageQueuePut(sensorQ, &myData, NULL, 0);
+		
+		if (driverless == USER_AUTO) {
+			osMessageQueuePut(sensorQ, &myData, NULL, 0);
+		}
 	}
 }
 
@@ -128,14 +135,9 @@ void bDrive (void *arg) {
 	myData.opt_n = 0xFF;
 
 	for (;;) {
-		osMessageQueueGet(driveQ, &myData, NULL, 0);
-		if (driverless == USER_AUTO) {
-			osMessageQueuePut(sensorQ, &myData, NULL, 0);
-		}
-		else {
-			executeDrive();
-			osMessageQueuePut(driveQ, &myData, NULL, 0);
-		}
+		osMessageQueueGet(driveQ, &myData, NULL, osWaitForever);
+		executeDrive();
+		osMessageQueuePut(driveQ, &myData, NULL, 0);
 	}
 }
 
@@ -179,7 +181,7 @@ void bMute(void* arg) {
 	myData.opt_n = 0xFF;
 
 	for (;;) {
-		osMessageQueueGet(muteQ, &myData, NULL, 0);
+		osMessageQueueGet(muteQ, &myData, NULL, osWaitForever);
 		if (muteTrig == MUTE) {
 			stop_music();
 			osMessageQueuePut(muteQ, &myData, NULL, 0);
@@ -246,36 +248,40 @@ void bSensor(void* arg) {
 	myData.opt_n = 0xFF;
 
 	for (;;) {
-		osMessageQueueGet(sensorQ, &myData, NULL, 0);
+		osMessageQueueGet(sensorQ, &myData, NULL, osWaitForever);
 		pulse();
 		osDelay(200);
 		executeDrive();
 		if (driverless == USER_AUTO) {
 			pulse();
 			osDelay(20);
-			if (distance < 80) {
+			if (distance < 100) {
 				forceDrive(STAYSTILL);
 				osDelay(500);
 				driverless_mode();
 				driverless = MID_AUTO;
 			} 
-			else if (distance > 80) {
+			else if (distance > 100) {
 				forceDrive(FORWARD_STRAIGHT);
 			}		
 		}
 		else if (driverless == MID_AUTO) {
 			pulse();
 			osDelay(20);
-			if (distance < 80) {
-				forceDrive(STAYSTILL); 
+			if (distance < 100) {
+				forceDrive(STAYSTILL);
+				osDelay(10);
+				executeDrive();
 				driverless = END_AUTO;
 			}
-			forceDrive(FORWARD_STRAIGHT);
+			else {
+				forceDrive(FORWARD_STRAIGHT);
+			}
 		}
 		else if (driverless == END_AUTO) {
-			forceDrive(STAYSTILL);
+			osMessageQueuePut(brainQ, &myData, NULL, 0);
 		}
-		osMessageQueuePut(brainQ, &myData, NULL, 0);
+		osMessageQueuePut(sensorQ, &myData, NULL, 0);
 	}
 }
 
