@@ -11,7 +11,6 @@ enum move_t { AUTO, STOP, FORWARD, REVERSE, CURVE_LEFT, CURVE_RIGHT, TURN_LEFT, 
 #define TRIG_PIN 6 // PortD Pin 6
 
 //driver functions
-void InitSensor(void);
 void InitMotor(void);
 void leftReverse(void);
 void rightReverse(void);

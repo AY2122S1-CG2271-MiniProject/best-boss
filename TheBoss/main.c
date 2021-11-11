@@ -244,19 +244,14 @@ void bSensor(void* arg) {
 
 	myData.req_t = 0xFF;
 	myData.opt_n = 0xFF;
-	maincounter = 0;
 
 	for (;;) {
 		osMessageQueueGet(sensorQ, &myData, NULL, 0);
 		
 		if (driverless == USER_AUTO) {
-			read = 0;
-
-
-			maincounter++;
-			read = readUltrasonic();
-			delay(0x18e70);
 			
+			pulse();
+			osDelay(1);
 			/*
 			driverless_mode(AUTO , 10);
 			*/
@@ -283,10 +278,9 @@ int main (void) {
  
   // System Initialization
 	SystemCoreClockUpdate();
-	
+	initTimer();
 	initUltrasonic();
 
-	
 	initUART2();
 	InitRGB();
 	initFrontGreenLEDGPIO();
@@ -299,14 +293,6 @@ int main (void) {
 	//offRearRedLED();
 	//offFrontGreenLED();
 	//play_end_song();
-	/*
-	while (1)
-	{
-		maincounter++;
-		read = readUltrasonic();
-		delay(0x18e70); // 1ms? 1ms / (128/48Mhz)*/
-	//}
-	
 	
 	osKernelInitialize();                 // Initialize CMSIS-RTOS
 	osThreadNew(bBrain, NULL, NULL);    // Create application brain thread
@@ -327,5 +313,4 @@ int main (void) {
 
 	osKernelStart();                      // Start thread execution
   for (;;) {}
-	
 }
