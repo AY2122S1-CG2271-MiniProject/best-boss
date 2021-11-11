@@ -50,6 +50,7 @@ void forceDrive(uint8_t newInstructions);
 #define USER_AUTO 0x02
 #define END_AUTO 0x03
 #define MID_AUTO 0x7A
+#define END_TRANSIT 0xFF
 
 //UART rx_data parsing
 #define USER_STOP 0x00
