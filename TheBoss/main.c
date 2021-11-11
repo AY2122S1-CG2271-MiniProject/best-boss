@@ -159,6 +159,7 @@ void bAudio (void *arg) {
 			osMessageQueuePut(audioQ, &myData, NULL, 0);
 		}
 		else if (connect == CONNECTING) {
+			audio_choice = WIFI_CONNECT;
 			play_wifi_song();
 			rx_data = 0x30;
 			audio_choice = SILENCE;
@@ -246,44 +247,47 @@ void bSensor(void* arg) {
 
 	for (;;) {
 		osMessageQueueGet(sensorQ, &myData, NULL, 0);
-		
+		pulse();
+		osDelay(200);
+		executeDrive();
 		if (driverless == USER_AUTO) {
 			pulse();
-			osDelay(1);
-			if (distance < 25) {
+			osDelay(20);
+			if (distance < 80) {
+				forceDrive(STAYSTILL);
+				osDelay(500);
 				driverless_mode();
 				driverless = MID_AUTO;
 			} 
-			else {
+			else if (distance > 80) {
 				forceDrive(FORWARD_STRAIGHT);
 			}		
-			osMessageQueuePut(brainQ, &myData, NULL, 0);
 		}
 		else if (driverless == MID_AUTO) {
 			pulse();
-			osDelay(1);
-			if (distance < 25) {
+			osDelay(20);
+			if (distance < 80) {
 				forceDrive(STAYSTILL); 
 				driverless = END_AUTO;
 			}
 			forceDrive(FORWARD_STRAIGHT);
 		}
 		else if (driverless == END_AUTO) {
-			osMessageQueuePut(brainQ, &myData, NULL, 0);
+			forceDrive(STAYSTILL);
 		}
+		osMessageQueuePut(brainQ, &myData, NULL, 0);
 	}
 }
 
 int main (void) {
  
-	
   // System Initialization
 	SystemCoreClockUpdate();
 	initTimer();
 	initUltrasonic();
 
 	initUART2();
-	//InitRGB();
+	InitRGB();
 	initFrontGreenLEDGPIO();
 	initRearRedLEDGPIO();
 	InitMotor(); //+Sensor within
@@ -291,10 +295,11 @@ int main (void) {
 	
 	//driverless_mode();
 	
-	//stop();
-	//offRGB();
-	//offRearRedLED();
-	//offFrontGreenLED();
+	stop();
+	offRGB();
+	offRearRedLED();
+	offFrontGreenLED();
+	audio_choice = WIFI_CONNECT;
 	//play_end_song();
 	
 	osKernelInitialize();                 // Initialize CMSIS-RTOS
