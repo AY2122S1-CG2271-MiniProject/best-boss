@@ -22,7 +22,7 @@ void rewrite_driveMode(uint8_t optionNumber);
 void rewrite_direction(uint8_t optionNumber);
 void executeDrive(void);
 int isDriving(void);
-void driverless_mode();
+void driverless_mode(void);
 void handleAutoSwitch(uint8_t option);
 void forceDrive(uint8_t newInstructions);
 
