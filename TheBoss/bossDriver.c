@@ -166,12 +166,12 @@ void motor_control(enum move_t move) {
 		TPM0_C0V = 0;												//RIGHT_FRONT
 		TPM0_C1V = 0;												//RIGHT_REAR
 		TPM0_C2V = 0;												//LEFT_FRONT
-		TPM0_C3V = MOTOR_FAST;										//LEFT_REAR
+		TPM0_C3V = MOTOR_FASTER;							//LEFT_REAR
 		break;
 	case REVERSE_RIGHT: // Rotate Right BACKWARDS
 		reverse();
 		TPM0_C0V = 0;
-		TPM0_C1V = MOTOR_FAST;
+		TPM0_C1V = MOTOR_FASTER;
 		TPM0_C2V = 0;
 		TPM0_C3V = 0;
 		break;
@@ -268,73 +268,76 @@ void handleAutoSwitch(uint8_t option) {
 	auto_modeOn = (option == USER_AUTO) ? 1 : ((option == END_AUTO) ? 0 : auto_modeOn);
 }
 
-void autoFwd(enum move_t move, int distance,int step){
-	int scaled_distance = distance*10000;
-	while(k[step] < scaled_distance) 
-	{
-		TPM1->MOD = 7500;
-		TPM1_C0V = MAX_DUTY_CYCLE;
-		TPM2->MOD = 7500;
-		TPM2_C0V = MAX_DUTY_CYCLE;
-		k[step]++;
-	}	
-		stop();		
+void driverless_mode() {
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(225);
+	
+	driveInstructions = STILL_LEFT;
+	motor_control(TURN_LEFT);
+	osDelay(225);
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	
+	driveInstructions = FORWARD_STRAIGHT;
+	motor_control(FORWARD);
+	osDelay(500);
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	
+	driveInstructions = STILL_RIGHT;
+	motor_control(TURN_RIGHT);
+	osDelay(500);
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	
+	driveInstructions = FORWARD_STRAIGHT;
+	motor_control(FORWARD);
+	osDelay(500);
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	
+	driveInstructions = STILL_RIGHT;
+	motor_control(TURN_RIGHT);
+	osDelay(600); //2nd right
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	
+	driveInstructions = FORWARD_STRAIGHT;
+	motor_control(FORWARD);
+	osDelay(500);
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	
+	driveInstructions = STILL_RIGHT;
+	motor_control(TURN_RIGHT);
+	osDelay(500); 
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	
+	driveInstructions = FORWARD_STRAIGHT;
+	motor_control(FORWARD);
+	osDelay(500);
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	
+	driveInstructions = STILL_LEFT;
+	motor_control(TURN_LEFT);
+	osDelay(400); //need to turn more
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	//forward until 
 }
 
-void autoFwdAlt(enum move_t move, int step){
-	while(j[step] < 110000)
-	{
-		TPM0_C0V = MOTOR_FAST;
-		TPM0_C1V = MOTOR_FAST;
-		TPM0_C2V = MOTOR_FAST;
-		TPM0_C3V = MOTOR_FAST;
-		j[step]++;
-	}	
-		stop();
-}
-
-void autoLeft(enum move_t move, int step){
-		while(j[step] < 7500) // turn left need to test
-		{
-		  leftReverse();
-			TPM0_C0V = MOTOR_FAST;
-			TPM0_C1V = MOTOR_FAST;
-			TPM0_C2V = 0;
-			TPM0_C3V = 0;
-			j[step]++;
-		}
-		stop();
-}
-
-
-void autoRight(enum move_t move, int step){
-		while(j[step] < 8000) // turn right need to test
-		{
-		  rightReverse();
-			TPM0_C0V = 0;
-			TPM0_C1V = 0;
-			TPM0_C2V = MOTOR_FAST;
-			TPM0_C3V = MOTOR_FAST;
-			j[step]++;
-		}
-		stop();
-}
-
-void driverless_mode(enum move_t move, int distance) {
-	autoFwd(AUTO, distance, 0);
-	autoLeft(AUTO,0);
-	autoFwdAlt(AUTO,1);
-	autoFwdAlt(AUTO,2);
-	autoRight(AUTO,3);
-	autoFwdAlt(AUTO,4);
-	autoFwdAlt(AUTO,5);
-	autoRight(AUTO,6);
-	autoFwdAlt(AUTO,7);
-	autoFwdAlt(AUTO,8);
-	autoFwd(AUTO,6,1);
-	autoRight(AUTO,9);
-	autoFwdAlt(AUTO,10);
-	autoFwdAlt(AUTO,11);
-	autoFwdAlt(AUTO,17);
-	autoFwd(AUTO,distance+5,2);
+void forceDrive(uint8_t newInstruction) {
+	driveInstructions = newInstruction;
 }

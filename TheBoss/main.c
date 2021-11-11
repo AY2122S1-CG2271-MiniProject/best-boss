@@ -238,7 +238,6 @@ void bRedFront(void *arg) {
 	}
 }
 
-
 void bSensor(void* arg) {
 	myDataPack myData;
 
@@ -249,44 +248,48 @@ void bSensor(void* arg) {
 		osMessageQueueGet(sensorQ, &myData, NULL, 0);
 		
 		if (driverless == USER_AUTO) {
-			
 			pulse();
 			osDelay(1);
-			/*
-			driverless_mode(AUTO , 10);
-			*/
+			if (distance < 25) {
+				driverless_mode();
+				driverless = MID_AUTO;
+			} 
+			else {
+				forceDrive(FORWARD_STRAIGHT);
+			}		
 			osMessageQueuePut(brainQ, &myData, NULL, 0);
+		}
+		else if (driverless == MID_AUTO) {
+			pulse();
+			osDelay(1);
+			if (distance < 25) {
+				forceDrive(STAYSTILL); 
+				driverless = END_AUTO;
+			}
+			forceDrive(FORWARD_STRAIGHT);
 		}
 		else if (driverless == END_AUTO) {
-			/* initUART2();
-			InitRGB();
-			initFrontGreenLEDGPIO();
-			initRearRedLEDGPIO();
-			InitMotor(); //+Sensor within
-			InitAudio(); */
 			osMessageQueuePut(brainQ, &myData, NULL, 0);
 		}
-		//maincounter++;
-		//read = readUltrasonic();
-		//osDelay(2);//delay(0x18e70); // 1ms? 1ms / (128/48Mhz)
-		//sensorDistance = checkDistance();
 	}
 }
 
- 
 int main (void) {
  
+	
   // System Initialization
 	SystemCoreClockUpdate();
 	initTimer();
 	initUltrasonic();
 
 	initUART2();
-	InitRGB();
+	//InitRGB();
 	initFrontGreenLEDGPIO();
 	initRearRedLEDGPIO();
 	InitMotor(); //+Sensor within
 	InitAudio();
+	
+	//driverless_mode();
 	
 	//stop();
 	//offRGB();
