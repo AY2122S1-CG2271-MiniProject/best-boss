@@ -9,51 +9,6 @@ volatile int k[STEPS] = {0};
 //RX_data Processing Tools
 uint8_t driveInstructions, NorthSouth, EastWest;
 
-void initUltrasonic(void) {
-
-	//Enable clock gating for portD
-	SIM->SCGC5 |= ((SIM_SCGC5_PORTA_MASK) | (SIM_SCGC5_PORTD_MASK));
-
-	//Set TRIG_PIN as GPIO output to trigger the sensor
-	PORTD->PCR[TRIG_PIN] &= ~PORT_PCR_MUX_MASK;
-	PORTD->PCR[TRIG_PIN] |= PORT_PCR_MUX(1);
-	PTD->PDDR |= MASK(TRIG_PIN);
-
-	//Set ECHO_PIN pin to TPM1_CH1 mode and pin to input
-	PORTA->PCR[ECHO_PIN] &= ~PORT_PCR_MUX_MASK;
-	PORTA->PCR[ECHO_PIN] |= (PORT_PCR_MUX(3));
-	PTA->PDDR &= ~(MASK(ECHO_PIN));
-
-	SIM->SCGC6 |= SIM_SCGC6_TPM1_MASK;
-	//Select Clock for TPM module
-	SIM->SOPT2 &= ~SIM_SOPT2_TPMSRC_MASK;
-	SIM->SOPT2 |= SIM_SOPT2_TPMSRC(1);
-
-	// 375000 / 7500 = 50 Hz [basically when reach 7500 (max count) will flip over to 0 and start again]
-	TPM1->MOD = 7500;
-
-
-	//Edge-Aligned PWM
-  //CMOD - 1 and PS - 111 (128)
-	TPM1_SC &= ~((TPM_SC_CMOD_MASK) | (TPM_SC_PS_MASK));
-	TPM1_SC |= (TPM_SC_CMOD(1) | TPM_SC_PS(7)); //CMOD = 1 => LPTPM counter increments on every LPTPM counter clock
-	TPM1_SC &= ~(TPM_SC_CPWMS_MASK); //count up by default (0)
-
-	  //Configure channel 3 from TPM0 as input capture for both edges and enabling interrupt
-	TPM1_C1SC &= ~((TPM_CnSC_ELSB_MASK) | (TPM_CnSC_ELSA_MASK) | (TPM_CnSC_MSB_MASK) | (TPM_CnSC_MSA_MASK) | (TPM_CnSC_CHIE_MASK));
-	TPM1_C1SC |= (TPM_CnSC_ELSB(1) | TPM_CnSC_ELSA(1) | TPM_CnSC_CHIE(1));
-
-	//Enable TPM0 interrupt
-	NVIC_SetPriority(TPM1_IRQn, 2);
-	NVIC_ClearPendingIRQ(TPM1_IRQn);
-	NVIC_EnableIRQ(TPM1_IRQn);
-
-	//Disable Clk to avoid interrupt triggers
-	SIM->SCGC6 &= ~SIM_SCGC6_TPM1_MASK;
-
-}
-
-
 void InitMotor(void) {
 	// Enable Clock Gating for PORTB and PORTD
 	SIM_SCGC5 |= SIM_SCGC5_PORTC_MASK;
@@ -380,7 +335,9 @@ void driverless_mode() {
 	driveInstructions = STAYSTILL;
 	stop();
 	osDelay(500);
-	
-	
 	//forward until 
+}
+
+void forceDrive(uint8_t newInstruction) {
+	driveInstructions = newInstruction;
 }

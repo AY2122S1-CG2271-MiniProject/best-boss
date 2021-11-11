@@ -11,7 +11,6 @@ enum move_t { AUTO, STOP, FORWARD, REVERSE, CURVE_LEFT, CURVE_RIGHT, TURN_LEFT, 
 #define TRIG_PIN 6 // PortD Pin 6
 
 //driver functions
-void InitSensor(void);
 void InitMotor(void);
 void leftReverse(void);
 void rightReverse(void);
@@ -23,8 +22,9 @@ void rewrite_driveMode(uint8_t optionNumber);
 void rewrite_direction(uint8_t optionNumber);
 void executeDrive(void);
 int isDriving(void);
-void driverless_mode();
+void driverless_mode(void);
 void handleAutoSwitch(uint8_t option);
+void forceDrive(uint8_t newInstructions);
 
 // Movement
 // larger oveflow value => higher duty cycle => faster
@@ -46,9 +46,10 @@ void handleAutoSwitch(uint8_t option);
 //#define RIGHT_PIN 8
 //#define LEFT_PIN 9
 
-//AUTO
+//AUTOSTILL
 #define USER_AUTO 0x02
 #define END_AUTO 0x03
+#define MID_AUTO 0x7A
 
 //UART rx_data parsing
 #define USER_STOP 0x00
