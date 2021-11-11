@@ -250,16 +250,9 @@ void bSensor(void* arg) {
 		osMessageQueueGet(sensorQ, &myData, NULL, 0);
 		
 		if (driverless == USER_AUTO) {
-			read = 0;
-
-
-			maincounter++;
-			read = readUltrasonic();
-			delay(0x18e70);
+			driverless_mode();
+			driverless = END_AUTO;
 			
-			/*
-			driverless_mode(AUTO , 10);
-			*/
 			osMessageQueuePut(brainQ, &myData, NULL, 0);
 		}
 		else if (driverless == END_AUTO) {
@@ -281,6 +274,7 @@ void bSensor(void* arg) {
  
 int main (void) {
  
+	
   // System Initialization
 	SystemCoreClockUpdate();
 	
@@ -288,11 +282,13 @@ int main (void) {
 
 	
 	initUART2();
-	InitRGB();
+	//InitRGB();
 	initFrontGreenLEDGPIO();
 	initRearRedLEDGPIO();
 	InitMotor(); //+Sensor within
 	InitAudio();
+	
+	//driverless_mode();
 	
 	//stop();
 	//offRGB();

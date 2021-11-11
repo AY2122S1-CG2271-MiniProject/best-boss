@@ -23,12 +23,13 @@ void rewrite_driveMode(uint8_t optionNumber);
 void rewrite_direction(uint8_t optionNumber);
 void executeDrive(void);
 int isDriving(void);
-void driverless_mode(enum move_t move, int distance);
+void driverless_mode();
 void handleAutoSwitch(uint8_t option);
 
 // Movement
 // larger oveflow value => higher duty cycle => faster
 #define FREQUENCY_TO_MOD(x) (375000 / x)
+#define MOTOR_FASTER (375000 / 25)
 #define MOTOR_FAST (375000 / 50)
 #define MOTOR_SLOW (375000 / 100)
 #define MOTOR_SLOWER (375000 / 150)
