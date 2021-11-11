@@ -9,7 +9,7 @@
 #define uS(x)									(48 * x)
 #define mS(x)									(48000 * x)
 
-volatile double distance = 0.0;
+volatile float distance = 0.0;
 volatile int active = 0;
 volatile uint8_t sensorCount = 0;
 
@@ -28,10 +28,12 @@ void initTimer(void) {
 	
 	TPM1->MOD = 17480 - 1;
 	
+	// Update SnC register: CMOD = 01, PS = 100 (16)
 	TPM1->SC &= ~((TPM_SC_CMOD_MASK) | (TPM_SC_PS_MASK));
-	TPM1->SC |= (TPM_SC_CMOD(1) | TPM_SC_PS(4)); // Prescaler of 16
+	TPM1->SC |= (TPM_SC_CMOD(1) | TPM_SC_PS(4));
 	TPM1->SC &= ~(TPM_SC_CPWMS_MASK);
 	TPM1->SC &= ~(TPM_SC_TOIE_MASK); //Clear Overflow Interrupt Register
+	
 	
 	TPM1_C1SC &= ~(TPM_CnSC_ELSB_MASK | TPM_CnSC_ELSA_MASK | TPM_CnSC_MSB_MASK | TPM_CnSC_MSA_MASK);
 	//TPM1_C1SC |= TPM_CnSC_ELSA(1) | TPM_CnSC_ELSB(1);;
@@ -42,7 +44,7 @@ void initTimer(void) {
 	__enable_irq();
 }
 
-static void waitForEcho(void) {
+static void detectEcho(void) {
 	TPM1_C1SC |= TPM_CnSC_ELSA(1); //Rising Edge Input Capture
 	TPM1_C1SC |= TPM_CnSC_CHIE(1); //Enable Interrupt
 }
@@ -74,9 +76,6 @@ static void initUltrasonic(void) {
 	PORTA->PCR[ECHO_PIN] &= ~PORT_PCR_MUX_MASK;
 	PORTA->PCR[ECHO_PIN] |= PORT_PCR_MUX(3);
 	
-	//PORTA->PCR[ECHO_PIN] &= ~PORT_PCR_IRQC_MASK;
-	//PORTA->PCR[ECHO_PIN] |= PORT_PCR_IRQC(11);
-	
 	PORTA->PCR[ECHO_PIN] &= ~PORT_PCR_PE_MASK;
 	
 	
@@ -93,7 +92,7 @@ void delay(volatile uint32_t nof) {
 
 static void pulse(void) {
 	PTD->PSOR |= MASK(TRIG_PIN);
-	waitForEcho();
+	detectEcho();
 	delay(uS(10));
 	
 	PTD->PCOR |= MASK(TRIG_PIN);
@@ -109,11 +108,13 @@ void TPM1_IRQHandler(void) {
 			double multiplier = (343000.0 * 16)/48000000;
 			distance = ((TPM1_C1V) * multiplier)/2;
 			resetTimer();
-		} else {
+		}
+		else {
 			active = 1;
 			startTimer();
 		}
-	} else if (TPM1->SC & TPM_SC_TOF_MASK) {
+	}
+	else if (TPM1->SC & TPM_SC_TOF_MASK) {
 		TPM1->SC |= TPM_SC_TOF(1); // Checking for overflow so that it resets when hit and counter = 1 cycle.
 		if (active) {
 			active = 0;

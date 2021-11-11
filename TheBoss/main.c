@@ -299,14 +299,11 @@ int main (void) {
 	InitMotor(); //+Sensor within
 	InitAudio();
 	
-	//driverless_mode();
-	
 	stop();
 	offRGB();
 	offRearRedLED();
 	offFrontGreenLED();
 	audio_choice = WIFI_CONNECT;
-	//play_end_song();
 	
 	osKernelInitialize();                 // Initialize CMSIS-RTOS
 	osThreadNew(bBrain, NULL, NULL);    // Create application brain thread

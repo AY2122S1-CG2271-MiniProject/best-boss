@@ -100,73 +100,58 @@ void motor_control(enum move_t move) {
 	// 0: left reverse, 1: left forwards, 2: right reverse, 3: right forwards
 	switch (move) {
 	case STOP:
-		TPM0_C0V = 0;												//RIGHT_FRONT0
-		TPM0_C1V = 0;												//RIGHT_REAR1
-		TPM0_C2V = 0;												//LEFT_FRONT2
-		TPM0_C3V = 0;												//LEFT_REAR3
+		TPM0_C0V = 0;																//RIGHT_FRONT0
+		TPM0_C1V = 0;																//RIGHT_REAR1
+		TPM0_C2V = 0;																//LEFT_FRONT2
+		TPM0_C3V = 0;																//LEFT_REAR3
 		break;
 	case TURN_LEFT: // Rotate Left
-		leftReverse();		// or rightForwardLeftReverse() (right 0;left high)
-		TPM0_C0V = MOTOR_FAST;										//RIGHT_FRONT yes
-		TPM0_C1V = MOTOR_FAST;										//RIGHT_REAR no
-		TPM0_C2V = 0;												//LEFT_FRONT no
-		TPM0_C3V = 0;												//LEFT_REAR yes
+		leftReverse();		// (right 0;left high)
+		TPM0_C0V = MOTOR_FAST;											//RIGHT_FRONT yes
+		TPM0_C1V = MOTOR_FAST;											//RIGHT_REAR no
+		TPM0_C2V = 0;																//LEFT_FRONT no
+		TPM0_C3V = 0;																//LEFT_REAR yes
 		break;
 	case TURN_RIGHT: // Rotate Right
-		rightReverse();  // or rightForwardLeftReverse()
-		TPM0_C0V = 0;												//RIGHT_FRONT
-		TPM0_C1V = 0;												//RIGHT_REAR
-		TPM0_C2V = MOTOR_FAST;										//LEFT_FRONT
-		TPM0_C3V = MOTOR_FAST;										//LEFT_REAR
+		rightReverse();
+		TPM0_C0V = 0;																//RIGHT_FRONT
+		TPM0_C1V = 0;																//RIGHT_REAR
+		TPM0_C2V = MOTOR_FAST;											//LEFT_FRONT
+		TPM0_C3V = MOTOR_FAST;											//LEFT_REAR
 		break;
-		//case TURN_LEFT: // Rotate Left
-		//	RightForwardLeftReverse();
-		//	TPM0_C0V = MOTOR_FAST;										//RIGHT_FRONT yes
-		//	TPM0_C1V = MOTOR_FAST;										//RIGHT_REAR yes
-		//	TPM0_C2V = 0;												//LEFT_FRONT yes
-		//	TPM0_C3V = 0;												//LEFT_REAR yes
-		//	break;
-		//case TURN_RIGHT: // Rotate Right
-		//	RightFowardLeftReverse();
-		//	TPM0_C0V = 0;												//RIGHT_FRONT
-		//	TPM0_C1V = 0;												//RIGHT_REAR
-		//	TPM0_C2V = MOTOR_FAST;										//LEFT_FRONT
-		//	TPM0_C3V = MOTOR_FAST;										//LEFT_REAR
-		//	break;
-
 	case FORWARD: // Forward
   // Switch on RED LED
-		TPM0_C0V = MOTOR_FAST;
-		TPM0_C1V = MOTOR_FAST;
-		TPM0_C2V = MOTOR_FAST;
-		TPM0_C3V = MOTOR_FAST;
+		TPM0_C0V = MOTOR_FAST;											//RIGHT_FRONT
+		TPM0_C1V = MOTOR_FAST;											//RIGHT_REAR
+		TPM0_C2V = MOTOR_FAST;											//LEFT_FRONT
+		TPM0_C3V = MOTOR_FAST;											//LEFT_REAR
 		break;
 	case CURVE_LEFT: // Forward + Left
-		TPM0_C0V = MOTOR_FAST;										//RIGHT_FRONT
-		TPM0_C1V = MOTOR_SLOW;										//RIGHT_REAR
-		TPM0_C2V = 0;												//LEFT_FRONT
-		TPM0_C3V = MOTOR_SLOWER;									//LEFT_REAR
+		TPM0_C0V = MOTOR_FAST;											//RIGHT_FRONT
+		TPM0_C1V = MOTOR_FAST;											//RIGHT_REAR
+		TPM0_C2V = 0;																//LEFT_FRONT
+		TPM0_C3V = 0;																//LEFT_REAR
 		break;
 	case CURVE_RIGHT: // Forward + Right
 		TPM0_C0V = 0;
-		TPM0_C1V = MOTOR_SLOWER;
+		TPM0_C1V = 0;
 		TPM0_C2V = MOTOR_FAST;
-		TPM0_C3V = MOTOR_SLOW;
+		TPM0_C3V = MOTOR_FAST;
 		break;
 
 	case REVERSE: // Backward
 		reverse();
-		TPM0_C0V = 0;
-		TPM0_C1V = 0;
-		TPM0_C2V = 0;
-		TPM0_C3V = 0;
+		TPM0_C0V = 0;																//RIGHT_FRONT
+		TPM0_C1V = 0;																//RIGHT_REAR
+		TPM0_C2V = 0;																//LEFT_FRONT
+		TPM0_C3V = 0;																//LEFT_REAR
 		break;
 	case REVERSE_LEFT: // Rotate LEFT BACKWARDS
 		reverse();
-		TPM0_C0V = 0;												//RIGHT_FRONT
-		TPM0_C1V = 0;												//RIGHT_REAR
-		TPM0_C2V = 0;												//LEFT_FRONT
-		TPM0_C3V = MOTOR_FASTER;							//LEFT_REAR
+		TPM0_C0V = 0;																//RIGHT_FRONT
+		TPM0_C1V = 0;																//RIGHT_REAR
+		TPM0_C2V = 0;																//LEFT_FRONT
+		TPM0_C3V = MOTOR_FASTER;										//LEFT_REAR
 		break;
 	case REVERSE_RIGHT: // Rotate Right BACKWARDS
 		reverse();
@@ -187,22 +172,6 @@ void stop(void) {
 void rewrite_driveMode(uint8_t optionNumber) {
 	NorthSouth = DRIVE_BACK_GO(optionNumber);
 	driveInstructions = MERGE_INSTRUCTIONS(EastWest, NorthSouth);
-	/*switch (optionNumber) {
-	case USER_STOP:
-		forward();
-		driveInstructions = STOP;
-		break;
-	case USER_FORWARD:
-		forward();
-		break;
-	case USER_REVERSE:
-		reverse();
-		break;
-	default:
-		//flashRedLight
-		stop();
-		break;
-	}*/
 }
 
 void rewrite_direction(uint8_t optionNumber) {
@@ -216,7 +185,6 @@ void rewrite_direction(uint8_t optionNumber) {
 	case USER_STRAIGHT:
 		break;
 	default:
-		//flashRedLight
 		stop();
 		break;
 	}

@@ -24,8 +24,6 @@ void InitAudio(void) {
 	uint32_t mod = 48E6 / (128 * 1047);
 	TPM2->MOD = mod;
 	TPM2_C0V = mod / 3;
-	
-	//int audio_choice = 0x00;
 }
 
 void stop_music(void) {
@@ -37,6 +35,7 @@ void play_note(uint32_t freq) {
 	uint32_t mod = 48E6 / (128 * freq);
 	TPM2->MOD = mod;
 	TPM2_C0V = mod / 3;
+	
 	TPM2_C0SC &= ~((TPM_CnSC_ELSB_MASK) | (TPM_CnSC_ELSA_MASK) | (TPM_CnSC_MSB_MASK) | (TPM_CnSC_MSA_MASK));
 	TPM2_C0SC |= (TPM_CnSC_ELSB(1) | TPM_CnSC_MSB(1));
 }
@@ -44,16 +43,6 @@ void play_note(uint32_t freq) {
 void overwriteAudio(uint8_t audioChoice) {
 	audio_choice = audioChoice;
 }
-
-/*
-void delays(int rep) {
-  int i = rep;
-  while (i > 0) {
-    osDelay(50);
-    i--;
-  }
-}
-//*/
 
 void play_end_song(void) {
 	play_note(NOTE_CD);
@@ -163,6 +152,7 @@ void play_moving_song(void) {
 	osDelay(313);
 	play_note(NOTE_A);
 	osDelay(313);
+	
 /*
 	stop_music();
 	osDelay(500);
@@ -203,20 +193,21 @@ void play_moving_song(void) {
 	play_note(NOTE_A);
 	osDelay(500);
 */
+
 	stop_music();
 	osDelay(400);
 }
 
 void play_wifi_song(void) {
 	play_note(NOTE_A);
-	osDelay(400);
+	osDelay(350);
 	
 	stop_music();
-	osDelay(300);
+	osDelay(250);
 	
 	play_note(NOTE_A);
-	osDelay(400);
+	osDelay(350);
 	
 	stop_music();
-	osDelay(300);
+	osDelay(250);
 }

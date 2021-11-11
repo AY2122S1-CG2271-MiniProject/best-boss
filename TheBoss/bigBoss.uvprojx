@@ -383,44 +383,9 @@
           <GroupName>Source Group 1</GroupName>
           <Files>
             <File>
-              <FileName>Semaphore.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Semaphore.c</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>bossVoice.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\bossVoice.h</FilePath>
-            </File>
-            <File>
-              <FileName>bossLED.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\bossLED.h</FilePath>
-            </File>
-            <File>
-              <FileName>bossBrain.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\bossBrain.h</FilePath>
-            </File>
-            <File>
-              <FileName>bossUART.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\bossUART.h</FilePath>
-            </File>
-            <File>
-              <FileName>commonHeads.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\commonHeads.h</FilePath>
-            </File>
-            <File>
-              <FileName>bossDriver.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\bossDriver.h</FilePath>
             </File>
             <File>
               <FileName>bossDriver.c</FileName>
@@ -442,15 +407,40 @@
               <FileType>1</FileType>
               <FilePath>.\bossUART.c</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>New Group</GroupName>
+          <Files>
+            <File>
+              <FileName>bossVoice.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\bossVoice.h</FilePath>
+            </File>
+            <File>
+              <FileName>bossLED.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\bossLED.h</FilePath>
+            </File>
+            <File>
+              <FileName>bossUART.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\bossUART.h</FilePath>
+            </File>
+            <File>
+              <FileName>commonHeads.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\commonHeads.h</FilePath>
+            </File>
             <File>
               <FileName>bossSensor.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\bossSensor.h</FilePath>
             </File>
             <File>
-              <FileName>bossSensor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\bossSensor.c</FilePath>
+              <FileName>bossDriver.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\bossDriver.h</FilePath>
             </File>
           </Files>
         </Group>
