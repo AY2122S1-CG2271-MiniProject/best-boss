@@ -105,7 +105,7 @@ void TPM1_IRQHandler(void) {
 		TPM1_C1SC |= TPM_CnSC_CHF(1); // If CHF = channel is 1 when an event occur- cleared by writing 1 
 		if (active) {
 			active = 0;
-			double multiplier = (343000.0 * 16)/48000000;
+			float multiplier = (343000.0 * 16)/48000000;
 			distance = ((TPM1_C1V) * multiplier)/2;
 			resetTimer();
 		}

@@ -241,7 +241,7 @@ void driverless_mode() {
 	stop();
 	osDelay(225);
 	
-	driveInstructions = STILL_LEFT;
+	driveInstructions = STILL_LEFT;										//First 45 Left
 	motor_control(TURN_LEFT);
 	osDelay(225);
 	driveInstructions = STAYSTILL;
@@ -255,9 +255,9 @@ void driverless_mode() {
 	stop();
 	osDelay(500);
 	
-	driveInstructions = STILL_RIGHT;
+	driveInstructions = STILL_RIGHT;										// First 90 Right
 	motor_control(TURN_RIGHT);
-	osDelay(500);
+	osDelay(300);
 	driveInstructions = STAYSTILL;
 	stop();
 	osDelay(500);
@@ -269,40 +269,40 @@ void driverless_mode() {
 	stop();
 	osDelay(500);
 	
-	driveInstructions = STILL_RIGHT;
+	driveInstructions = STILL_RIGHT;										// Second 90 Right
 	motor_control(TURN_RIGHT);
-	osDelay(600); //2nd right
+	osDelay(300); //2nd right
 	driveInstructions = STAYSTILL;
 	stop();
 	osDelay(500);
 	
 	driveInstructions = FORWARD_STRAIGHT;
 	motor_control(FORWARD);
-	osDelay(500);
+	osDelay(550);
 	driveInstructions = STAYSTILL;
 	stop();
 	osDelay(500);
 	
-	driveInstructions = STILL_RIGHT;
+	driveInstructions = STILL_RIGHT;										// Third 90 Right
 	motor_control(TURN_RIGHT);
-	osDelay(500); 
+	osDelay(300); 
 	driveInstructions = STAYSTILL;
 	stop();
 	osDelay(500);
 	
 	driveInstructions = FORWARD_STRAIGHT;
 	motor_control(FORWARD);
-	osDelay(500);
+	osDelay(650);
 	driveInstructions = STAYSTILL;
 	stop();
 	osDelay(500);
 	
-	driveInstructions = STILL_LEFT;
-	motor_control(TURN_LEFT);
-	osDelay(400); //need to turn more
-	driveInstructions = STAYSTILL;
-	stop();
-	osDelay(500);
+	//driveInstructions = STILL_LEFT;										// Final Back to straight
+	//motor_control(TURN_LEFT);
+	//osDelay(200); //need to turn more
+	//driveInstructions = STAYSTILL;
+	//stop();
+	//osDelay(500);
 	//forward until 
 }
 

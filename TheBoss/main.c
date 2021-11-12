@@ -255,20 +255,23 @@ void bSensor(void* arg) {
 		if (driverless == USER_AUTO) {
 			pulse();
 			osDelay(20);
-			if (distance < 100) {
+			
+			//How Far from obstacle
+			if (distance < 40) {
 				forceDrive(STAYSTILL);
-				osDelay(500);
+				executeDrive();
+				osDelay(1000);
 				driverless_mode();
 				driverless = MID_AUTO;
 			} 
-			else if (distance > 100) {
+			else if (distance > 40) {
 				forceDrive(FORWARD_STRAIGHT);
 			}		
 		}
 		else if (driverless == MID_AUTO) {
 			pulse();
 			osDelay(20);
-			if (distance < 100) {
+			if (distance < 50) {
 				forceDrive(STAYSTILL);
 				osDelay(10);
 				executeDrive();
@@ -288,6 +291,7 @@ void bSensor(void* arg) {
 int main (void) {
  
   // System Initialization
+
 	SystemCoreClockUpdate();
 	initTimer();
 	initUltrasonic();
