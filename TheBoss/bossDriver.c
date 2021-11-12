@@ -9,36 +9,6 @@ volatile int k[STEPS] = {0};
 //RX_data Processing Tools
 uint8_t driveInstructions, NorthSouth, EastWest;
 
-void InitSensor(void) {
-	// Configure MUX settings for sensor
- PORTD->PCR[TRIG_PIN] &= ~PORT_PCR_MUX_MASK;
- PORTD->PCR[TRIG_PIN] |= PORT_PCR_MUX(4);
-	
-	//Select clock for TPM module
-	SIM->SOPT2 &= ~SIM_SOPT2_TPMSRC_MASK;
-	SIM->SOPT2 |= SIM_SOPT2_TPMSRC(1); //MCGFLLCLK OR MCGPLLCLK/2
-	
-	//set modulo value 48000000/128 = 375000, 375000Hz/50Hz = 7500
-	TPM1->MOD = 7500;
-	
-	//Edge-Aligned PWM
-	//CMOD - 1 and PS - 111 (128)
-	TPM1_SC &= ~((TPM_SC_CMOD_MASK) | (TPM_SC_PS_MASK));
-	TPM1_SC |= (TPM_SC_CMOD(1) | TPM_SC_PS(7)); //CMOD = 1 => LPTPM counter increments on every LPTPM counter clock
-	TPM1_SC &= ~(TPM_SC_CPWMS_MASK); //count up by default (0)
-
-	//enable PWM on TPM1 channel 0 - PTD5
-	TPM1_C0SC &= ~((TPM_CnSC_ELSB_MASK) | (TPM_CnSC_ELSA_MASK) | (TPM_CnSC_MSB_MASK) | (TPM_CnSC_MSA_MASK));
-	TPM1_C0SC |= (TPM_CnSC_ELSB(1) | TPM_CnSC_MSB(1));
- 
- // Configure MUX settings for ECHO
- PORTD->PCR[ECHO_PIN] &= ~PORT_PCR_MUX_MASK;
- PORTD->PCR[ECHO_PIN] |= PORT_PCR_MUX(1);
-
- // Set Data Direction Registers for TRIG_PIN(OUTPUT) , ECHO_PIN(INPUT)
- PTD->PDDR &= ~MASK(ECHO_PIN); //INPUT
-}
-
 void InitMotor(void) {
 	// Enable Clock Gating for PORTB and PORTD
 	SIM_SCGC5 |= SIM_SCGC5_PORTC_MASK;
@@ -57,7 +27,7 @@ void InitMotor(void) {
 	PORTD->PCR[PTD3_Pin] &= ~PORT_PCR_MUX_MASK;
 	PORTD->PCR[PTD3_Pin] |= PORT_PCR_MUX(4);
 
-	//Configure Mode for Motor Front Back Control;
+	// Configure Mode for Motor Front Back Control;
 	PORTC->PCR[FRONT_PIN] &= ~PORT_PCR_MUX_MASK;
 	PORTC->PCR[FRONT_PIN] |= PORT_PCR_MUX(3);
 
@@ -105,9 +75,14 @@ void InitMotor(void) {
 	TPM0_C5SC |= (TPM_CnSC_ELSB(1) | TPM_CnSC_MSB(1));
 }
 
-void FrontReverseRear(void) {
+void leftReverse(void) {
 	TPM0_C4V = 0;
 	TPM0_C5V = MOTOR_FAST;
+}
+
+void rightReverse(void) {
+	TPM0_C4V = MOTOR_FAST;
+	TPM0_C5V = 0;
 }
 
 void forward(void) {
@@ -125,78 +100,63 @@ void motor_control(enum move_t move) {
 	// 0: left reverse, 1: left forwards, 2: right reverse, 3: right forwards
 	switch (move) {
 	case STOP:
-		TPM0_C0V = 0;												//RIGHT_FRONT0
-		TPM0_C1V = 0;												//RIGHT_REAR1
-		TPM0_C2V = 0;												//LEFT_FRONT2
-		TPM0_C3V = 0;												//LEFT_REAR3
+		TPM0_C0V = 0;																//RIGHT_FRONT0
+		TPM0_C1V = 0;																//RIGHT_REAR1
+		TPM0_C2V = 0;																//LEFT_FRONT2
+		TPM0_C3V = 0;																//LEFT_REAR3
 		break;
 	case TURN_LEFT: // Rotate Left
-		FrontReverseRear();
-		TPM0_C0V = MOTOR_FAST;										//RIGHT_FRONT yes
-		TPM0_C1V = MOTOR_FAST;										//RIGHT_REAR no
-		TPM0_C2V = 0;												//LEFT_FRONT no
-		TPM0_C3V = 0;												//LEFT_REAR yes
+		leftReverse();		// (right 0;left high)
+		TPM0_C0V = MOTOR_FAST;											//RIGHT_FRONT yes
+		TPM0_C1V = MOTOR_FAST;											//RIGHT_REAR no
+		TPM0_C2V = 0;																//LEFT_FRONT no
+		TPM0_C3V = 0;																//LEFT_REAR yes
 		break;
 	case TURN_RIGHT: // Rotate Right
-		FrontReverseRear();
-		TPM0_C0V = 0;												//RIGHT_FRONT
-		TPM0_C1V = 0;												//RIGHT_REAR
-		TPM0_C2V = MOTOR_FAST;										//LEFT_FRONT
-		TPM0_C3V = MOTOR_FAST;										//LEFT_REAR
+		rightReverse();
+		TPM0_C0V = 0;																//RIGHT_FRONT
+		TPM0_C1V = 0;																//RIGHT_REAR
+		TPM0_C2V = MOTOR_FAST;											//LEFT_FRONT
+		TPM0_C3V = MOTOR_FAST;											//LEFT_REAR
 		break;
-		//case TURN_LEFT: // Rotate Left
-		//	RightForwardLeftReverse();
-		//	TPM0_C0V = MOTOR_FAST;										//RIGHT_FRONT yes
-		//	TPM0_C1V = MOTOR_FAST;										//RIGHT_REAR yes
-		//	TPM0_C2V = 0;												//LEFT_FRONT yes
-		//	TPM0_C3V = 0;												//LEFT_REAR yes
-		//	break;
-		//case TURN_RIGHT: // Rotate Right
-		//	RightFowardLeftReverse();
-		//	TPM0_C0V = 0;												//RIGHT_FRONT
-		//	TPM0_C1V = 0;												//RIGHT_REAR
-		//	TPM0_C2V = MOTOR_FAST;										//LEFT_FRONT
-		//	TPM0_C3V = MOTOR_FAST;										//LEFT_REAR
-		//	break;
-
 	case FORWARD: // Forward
   // Switch on RED LED
-		TPM0_C0V = MOTOR_FAST;
-		TPM0_C1V = MOTOR_FAST;
-		TPM0_C2V = MOTOR_FAST;
-		TPM0_C3V = MOTOR_FAST;
+		TPM0_C0V = MOTOR_FAST;											//RIGHT_FRONT
+		TPM0_C1V = MOTOR_FAST;											//RIGHT_REAR
+		TPM0_C2V = MOTOR_FAST;											//LEFT_FRONT
+		TPM0_C3V = MOTOR_FAST;											//LEFT_REAR
 		break;
 	case CURVE_LEFT: // Forward + Left
-		TPM0_C0V = MOTOR_FAST;										//RIGHT_FRONT
-		TPM0_C1V = MOTOR_SLOW;										//RIGHT_REAR
-		TPM0_C2V = 0;												//LEFT_FRONT
-		TPM0_C3V = MOTOR_SLOWER;									//LEFT_REAR
+		TPM0_C0V = MOTOR_FAST;											//RIGHT_FRONT
+		TPM0_C1V = MOTOR_FAST;											//RIGHT_REAR
+		TPM0_C2V = 0;																//LEFT_FRONT
+		TPM0_C3V = 0;																//LEFT_REAR
 		break;
 	case CURVE_RIGHT: // Forward + Right
 		TPM0_C0V = 0;
-		TPM0_C1V = MOTOR_SLOWER;
+		TPM0_C1V = 0;
 		TPM0_C2V = MOTOR_FAST;
-		TPM0_C3V = MOTOR_SLOW;
+		TPM0_C3V = MOTOR_FAST;
 		break;
 
 	case REVERSE: // Backward
 		reverse();
-		TPM0_C0V = 0;
-		TPM0_C1V = 0;
-		TPM0_C2V = 0;
-		TPM0_C3V = 0;
+		TPM0_C0V = 0;																//RIGHT_FRONT
+		TPM0_C1V = 0;																//RIGHT_REAR
+		TPM0_C2V = 0;																//LEFT_FRONT
+		TPM0_C3V = 0;																//LEFT_REAR
 		break;
 	case REVERSE_LEFT: // Rotate LEFT BACKWARDS
 		reverse();
-		TPM0_C0V = 0;												//RIGHT_FRONT
-		TPM0_C1V = 0;												//RIGHT_REAR
-		TPM0_C2V = 0;												//LEFT_FRONT
-		TPM0_C3V = MOTOR_FAST;										//LEFT_REAR
+		TPM0_C0V = 0;																//RIGHT_FRONT
+		TPM0_C1V = 0;																//RIGHT_REAR
+		TPM0_C2V = 0;																//LEFT_FRONT
+		TPM0_C3V = MOTOR_FASTER;										//LEFT_REAR
 		break;
 	case REVERSE_RIGHT: // Rotate Right BACKWARDS
 		reverse();
 		TPM0_C0V = 0;
-		TPM0_C1V = MOTOR_FAST;
+		TPM0_C1V = MOTOR_FASTER;
 		TPM0_C2V = 0;
 		TPM0_C3V = 0;
 		break;
@@ -212,22 +172,6 @@ void stop(void) {
 void rewrite_driveMode(uint8_t optionNumber) {
 	NorthSouth = DRIVE_BACK_GO(optionNumber);
 	driveInstructions = MERGE_INSTRUCTIONS(EastWest, NorthSouth);
-	/*switch (optionNumber) {
-	case USER_STOP:
-		forward();
-		driveInstructions = STOP;
-		break;
-	case USER_FORWARD:
-		forward();
-		break;
-	case USER_REVERSE:
-		reverse();
-		break;
-	default:
-		//flashRedLight
-		stop();
-		break;
-	}*/
 }
 
 void rewrite_direction(uint8_t optionNumber) {
@@ -241,7 +185,6 @@ void rewrite_direction(uint8_t optionNumber) {
 	case USER_STRAIGHT:
 		break;
 	default:
-		//flashRedLight
 		stop();
 		break;
 	}
@@ -293,73 +236,76 @@ void handleAutoSwitch(uint8_t option) {
 	auto_modeOn = (option == USER_AUTO) ? 1 : ((option == END_AUTO) ? 0 : auto_modeOn);
 }
 
-void autoFwd(enum move_t move, int distance,int step){
-	int scaled_distance = distance*10000;
-	while(k[step] < scaled_distance) 
-	{
-		TPM1->MOD = 7500;
-		TPM1_C0V = MAX_DUTY_CYCLE;
-		TPM2->MOD = 7500;
-		TPM2_C0V = MAX_DUTY_CYCLE;
-		k[step]++;
-	}	
-		stop();		
+void driverless_mode() {
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(225);
+	
+	driveInstructions = STILL_LEFT;										//First 45 Left
+	motor_control(TURN_LEFT);
+	osDelay(225);
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	
+	driveInstructions = FORWARD_STRAIGHT;
+	motor_control(FORWARD);
+	osDelay(500);
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	
+	driveInstructions = STILL_RIGHT;										// First 90 Right
+	motor_control(TURN_RIGHT);
+	osDelay(300);
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	
+	driveInstructions = FORWARD_STRAIGHT;
+	motor_control(FORWARD);
+	osDelay(500);
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	
+	driveInstructions = STILL_RIGHT;										// Second 90 Right
+	motor_control(TURN_RIGHT);
+	osDelay(300); //2nd right
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	
+	driveInstructions = FORWARD_STRAIGHT;
+	motor_control(FORWARD);
+	osDelay(550);
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	
+	driveInstructions = STILL_RIGHT;										// Third 90 Right
+	motor_control(TURN_RIGHT);
+	osDelay(300); 
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	
+	driveInstructions = FORWARD_STRAIGHT;
+	motor_control(FORWARD);
+	osDelay(650);
+	driveInstructions = STAYSTILL;
+	stop();
+	osDelay(500);
+	
+	//driveInstructions = STILL_LEFT;										// Final Back to straight
+	//motor_control(TURN_LEFT);
+	//osDelay(200); //need to turn more
+	//driveInstructions = STAYSTILL;
+	//stop();
+	//osDelay(500);
+	//forward until 
 }
 
-void autoFwdAlt(enum move_t move, int step){
-	while(j[step] < 110000)
-	{
-		TPM0_C0V = MOTOR_FAST;
-		TPM0_C1V = MOTOR_FAST;
-		TPM0_C2V = MOTOR_FAST;
-		TPM0_C3V = MOTOR_FAST;
-		j[step]++;
-	}	
-		stop();
-}
-
-void autoLeft(enum move_t move, int step){
-		while(j[step] < 7500) // turn left need to test
-		{
-		  FrontReverseRear();
-			TPM0_C0V = MOTOR_FAST;
-			TPM0_C1V = MOTOR_FAST;
-			TPM0_C2V = 0;
-			TPM0_C3V = 0;
-			j[step]++;
-		}
-		stop();
-}
-
-
-void autoRight(enum move_t move, int step){
-		while(j[step] < 8000) // turn right need to test
-		{
-		  FrontReverseRear();
-			TPM0_C0V = 0;
-			TPM0_C1V = 0;
-			TPM0_C2V = MOTOR_FAST;
-			TPM0_C3V = MOTOR_FAST;
-			j[step]++;
-		}
-		stop();
-}
-
-void driverless_mode(enum move_t move, int distance) {
-	autoFwd(AUTO, distance, 0);
-	autoLeft(AUTO,0);
-	autoFwdAlt(AUTO,1);
-	autoFwdAlt(AUTO,2);
-	autoRight(AUTO,3);
-	autoFwdAlt(AUTO,4);
-	autoFwdAlt(AUTO,5);
-	autoRight(AUTO,6);
-	autoFwdAlt(AUTO,7);
-	autoFwdAlt(AUTO,8);
-	autoFwd(AUTO,6,1);
-	autoRight(AUTO,9);
-	autoFwdAlt(AUTO,10);
-	autoFwdAlt(AUTO,11);
-	autoFwdAlt(AUTO,17);
-	autoFwd(AUTO,distance+5,2);
+void forceDrive(uint8_t newInstruction) {
+	driveInstructions = newInstruction;
 }

@@ -15,7 +15,7 @@ enum color_t {NONE, RED, GREEN, BLUE, CYAN, YELLOW, MAGENTA, WHITE, OFFRED, OFFG
 /*----------------------------------------------------------------------------
  * REAR RED LEDs
  *---------------------------------------------------------------------------*/
-#define PTA1_RLED1  	1										//PTA1_RLED1
+#define PTC7_RLED1  	7										//PTC7_RLED1
 #define PTA2_RLED2  	2										//PTA2_RLED2
 #define PTD4_RLED3  	4										//PTD4_RLED3
 #define PTA12_RLED4 	12										//PTA12_RLED4

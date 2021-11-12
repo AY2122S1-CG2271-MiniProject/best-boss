@@ -3,16 +3,17 @@
 #ifndef DRIVER_H
 #define DRIVER_H
 
-enum move_t { AUTO, STOP, FORWARD, REVERSE, CURVE_LEFT, CURVE_RIGHT, TURN_LEFT, TURN_RIGHT, REVERSE_LEFT, REVERSE_RIGHT};
+enum move_t {STOP, FORWARD, REVERSE, CURVE_LEFT, CURVE_RIGHT, TURN_LEFT, TURN_RIGHT, REVERSE_LEFT, REVERSE_RIGHT};
 //Store Drive Instructions
 
 // SENSOR
-#define TRIG_PIN 5 // PortD Pin 5
-#define ECHO_PIN 6 // PortD Pin 6
+#define ECHO_PIN 13 // Porta Pin 13
+#define TRIG_PIN 6 // PortD Pin 6
 
 //driver functions
 void InitMotor(void);
-void FrontReverseRear(void);
+void leftReverse(void);
+void rightReverse(void);
 void forward(void);
 void reverse(void);
 void motor_control(enum move_t move);
@@ -21,12 +22,14 @@ void rewrite_driveMode(uint8_t optionNumber);
 void rewrite_direction(uint8_t optionNumber);
 void executeDrive(void);
 int isDriving(void);
-void driverless_mode(enum move_t move, int distance);
+void driverless_mode(void);
 void handleAutoSwitch(uint8_t option);
+void forceDrive(uint8_t newInstructions);
 
 // Movement
 // larger oveflow value => higher duty cycle => faster
 #define FREQUENCY_TO_MOD(x) (375000 / x)
+#define MOTOR_FASTER (375000 / 25)
 #define MOTOR_FAST (375000 / 50)
 #define MOTOR_SLOW (375000 / 100)
 #define MOTOR_SLOWER (375000 / 150)
@@ -43,9 +46,11 @@ void handleAutoSwitch(uint8_t option);
 //#define RIGHT_PIN 8
 //#define LEFT_PIN 9
 
-//AUTO
+//AUTOSTILL
 #define USER_AUTO 0x02
 #define END_AUTO 0x03
+#define MID_AUTO 0x7A
+#define END_TRANSIT 0xFF
 
 //UART rx_data parsing
 #define USER_STOP 0x00

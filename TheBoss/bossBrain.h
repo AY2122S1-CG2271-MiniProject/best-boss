@@ -3,10 +3,8 @@
 #ifndef BRAIN_H
 #define BRAIN_H
 
-#define AUTOSEMAPHORE					0x02
-
 /*----------------------------------------------------------------------------
- *      Semaphore creation & usage
+ *      MessageQueue creation & usage
  *---------------------------------------------------------------------------*/
  
 osSemaphoreId_t bossDrive;                  // semaphore id
